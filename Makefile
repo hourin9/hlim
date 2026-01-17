@@ -3,7 +3,7 @@ YACC := bison
 LEX := flex
 
 WARN := -Wall -Werror
-INTERNAL_CFLAGS := $(WARN) -MMD
+INTERNAL_CFLAGS := $(WARN) -std=gnu23 -MMD
 override CFLAGS += $(INTERNAL_CFLAGS)
 
 SRC_FILES := $(wildcard *.c)
@@ -23,7 +23,7 @@ lex.yy.o: lex.yy.c gram.tab.h
 	$(CC) -c $< $(CFLAGS) -o $@
 
 gram.tab.h: gram.tab.c
-gram.tab.c: gram.y
+gram.tab.c: gram.y hlim.h
 	$(YACC) -d $< -Werror
 
 lex.yy.c: lex.l

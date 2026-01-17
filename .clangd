@@ -1,2 +1,2 @@
 CompileFlags:
-    Add: [-Wall, -Werror, "-xc"]
+    Add: [-Wall, -Werror, "-std=gnu23", "-xc"]
