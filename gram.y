@@ -62,7 +62,10 @@ expr: ID { $$ = id($1); }
     | call
     ;
 
-call: expr '(' args_opt ')'
+call: expr '(' args_opt ')' {
+        $$ = node(AST_Call, $3);
+        $$->func = $1;
+    }
     ;
 
 args_opt: %empty { $$ = nullptr; }

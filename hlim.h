@@ -11,6 +11,7 @@ enum ASTType {
         AST_NumericLiteral,
         AST_Block,
         AST_Id,
+        AST_Call,
 };
 
 struct AST {
@@ -24,7 +25,8 @@ struct AST {
 
         union {
                 struct AST *rhs,
-                           *body;
+                           *body,
+                           *func;
         };
 
         // Reserved for arithmetic operations.
