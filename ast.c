@@ -68,3 +68,19 @@ struct AST *string(char *str)
         return node;
 }
 
+struct AST *id(char *sval)
+{
+        struct AST *node = default_node();
+        node->type = AST_Id;
+        node->id = sval;
+        return node;
+}
+
+struct AST *block(struct AST *body)
+{
+        struct AST *node = default_node();
+        node->type = AST_Block;
+        node->body = body;
+        return node;
+}
+

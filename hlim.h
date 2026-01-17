@@ -9,15 +9,26 @@ enum ASTType {
         AST_Decl,
         AST_StringLiteral,
         AST_NumericLiteral,
+        AST_Block,
+        AST_Id,
 };
 
 struct AST {
         enum ASTType type;
         float f32;
-        char *sval;
+
+        union {
+                char *sval,
+                     *id;
+        };
+
+        union {
+                struct AST *rhs,
+                           *body;
+        };
 
         // Reserved for arithmetic operations.
-        struct AST *rhs, *lhs;
+        struct AST *lhs;
 
         // Linked list of args.
         struct AST *args;
@@ -43,4 +54,6 @@ struct AST *binary(struct AST *lhs, struct AST *rhs);
 struct AST *leaf(enum ASTType, char *sval);
 struct AST *number(float);
 struct AST *string(char*);
+struct AST *id(char *sval);
+struct AST *block(struct AST *body);
 
