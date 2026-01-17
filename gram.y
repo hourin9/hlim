@@ -49,14 +49,16 @@ stmt: DECL '(' decl_body ')' { $$ = $3; }
     ;
 
 decl_body: ID expr {
-                ;
+                struct AST *args = string($1);
+                args->next = $2;
+                $$ = node(AST_Decl, args);
          }
          ;
 
-expr: ID { $$ = nullptr; }
+expr: ID { $$ = id($1); }
     | NUM_LIT { $$ = number($1); }
     | STR_LIT { $$ = string($1); }
-    | '{' stmt_list '}' { /* TODO */ }
+    | '{' stmt_list '}' { $$ = block($2); }
     | call
     ;
 
