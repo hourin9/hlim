@@ -1,7 +1,7 @@
 #include "hlim.h"
 
 struct InterpValue evaluate_one(
-        struct RuntimeSymTable *st,
+        RST_t *st,
         const struct AST *n)
 {
         return (struct InterpValue){ 0 };

@@ -76,15 +76,21 @@ struct InterpValue {
         };
 };
 
-typedef struct {char *id; struct InterpValue val;}* ScopeSymTable_t;
+typedef struct {char *key; struct InterpValue value;} ScopeSymTable_t;
+typedef ScopeSymTable_t SST_t;
 
 struct RuntimeSymTable {
-        ScopeSymTable_t *levels;
+        SST_t **levels;
         size_t current;
 };
 
-void rst_new_scope(struct RuntimeSymTable*);
-struct RuntimeSymTable init_runtime_symtable();
+typedef struct RuntimeSymTable RST_t;
 
-struct InterpValue evaluate_one(struct RuntimeSymTable*, const struct AST*);
+RST_t init_runtime_symtable();
+void rst_new_scope(RST_t*);
+
+SST_t *current_rt_scope(RST_t*);
+SST_t *global_rt_scope(RST_t*);
+
+struct InterpValue evaluate_one(RST_t*, const struct AST*);
 
