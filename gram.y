@@ -10,11 +10,14 @@ void yyerror(char const*);
 
 %union {
         char *str;
+        float f32;
 }
 
 %token DECL
 
+%token <f32> NUM_LIT
 %token <str> ID
+%token <str> STR_LIT
 
 %start input
 %%
@@ -33,6 +36,8 @@ decl_body: ID expr
          ;
 
 expr: ID
+    | NUM_LIT
+    | STR_LIT
     | '{' stmt_list '}'
     ;
 
@@ -40,7 +45,7 @@ expr: ID
 
 void yyerror(char const *msg)
 {
-    fprintf(stderr, "%s\n", msg);
-    exit(1);
+        fprintf(stderr, "%s\n", msg);
+        exit(1);
 }
 
