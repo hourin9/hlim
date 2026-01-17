@@ -14,6 +14,14 @@ int main(int argc, char **argv)
                 return 0;
 
         recursive_print(stderr, parser_ast, 0);
+
+        RST_t rst = init_runtime_symtable();
+        struct AST *cur = parser_ast;
+        while (cur != nullptr) {
+                evaluate_one(&rst, cur);
+                cur = cur->next;
+        }
+
         return 0;
 }
 
