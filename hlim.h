@@ -59,3 +59,22 @@ struct AST *string(char*);
 struct AST *id(char *sval);
 struct AST *block(struct AST *body);
 
+enum ValueType {
+        VAL_Nil,
+        VAL_Num,
+        VAL_String,
+        VAL_Id,
+        VAL_Node,
+};
+
+struct InterpValue {
+        enum ValueType type;
+        union {
+                float f32;
+                char *str;
+                struct AST *node;
+        };
+};
+
+struct InterpValue evaluate_one(const struct AST*);
+
