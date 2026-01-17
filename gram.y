@@ -34,14 +34,23 @@ input: stmt_list { parser_ast = $1; }
      ;
 
 stmt_list: %empty { $$ = nullptr; }
-         | stmt_list stmt { $$ = append_arg($2, $1); }
+         | stmt_list stmt {
+                if ($1 == nullptr)
+                        $$ = $2;
+                else {
+                        append_arg($2, $1);
+                        $$ = $1;
+                }
+         }
          ;
 
 stmt: DECL '(' decl_body ')' { $$ = $3; }
     | expr { $$ = $1; }
     ;
 
-decl_body: ID expr { /* TODO */ }
+decl_body: ID expr {
+                ;
+         }
          ;
 
 expr: ID { $$ = nullptr; }
@@ -55,11 +64,11 @@ call: expr '(' args_opt ')'
     ;
 
 args_opt: %empty { $$ = nullptr; }
-        | arg_list
+        | arg_list { $$ = $1; }
         ;
 
-arg_list: arg_list expr { /* TODO */ }
-        | expr
+arg_list: arg_list expr { $1->next = $2; $$ = $1; }
+        | expr { $$ = $1; }
         ;
 
 %%
