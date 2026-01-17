@@ -76,5 +76,15 @@ struct InterpValue {
         };
 };
 
-struct InterpValue evaluate_one(const struct AST*);
+typedef struct {char *id; struct InterpValue val;}* ScopeSymTable_t;
+
+struct RuntimeSymTable {
+        ScopeSymTable_t *levels;
+        size_t current;
+};
+
+void rst_new_scope(struct RuntimeSymTable*);
+struct RuntimeSymTable init_runtime_symtable();
+
+struct InterpValue evaluate_one(struct RuntimeSymTable*, const struct AST*);
 
