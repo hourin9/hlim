@@ -58,5 +58,6 @@ dkms.conf
 Session*.vim
 
 hlim*
+!hlim.h
 gram.tab.*
 lex.yy.*
