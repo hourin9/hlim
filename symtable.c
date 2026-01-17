@@ -24,3 +24,16 @@ SST_t *current_rt_scope(RST_t *rst)
         return rst->levels[rst->current];
 }
 
+void rst_set(RST_t *rst, char *id, struct InterpValue val)
+{
+        hmput(rst->levels[rst->current], id, val);
+}
+
+struct InterpValue rst_find_one_scope(RST_t *rst, char *id, size_t scope)
+{
+        if (scope > rst->current)
+                return (struct InterpValue){ .type = VAL_Nil };
+
+        return hmget(rst->levels[rst->current], id);
+}
+

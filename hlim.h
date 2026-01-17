@@ -91,6 +91,8 @@ void rst_new_scope(RST_t*);
 
 SST_t *current_rt_scope(RST_t*);
 SST_t *global_rt_scope(RST_t*);
+void rst_set(RST_t*, char *id, struct InterpValue val);
+struct InterpValue rst_find_one_scope(RST_t*, char *id, size_t scope);
 
 struct InterpValue evaluate_one(RST_t*, const struct AST*);
 
