@@ -39,7 +39,19 @@ expr: ID
     | NUM_LIT
     | STR_LIT
     | '{' stmt_list '}'
+    | call
     ;
+
+call: expr '(' args_opt ')'
+    ;
+
+args_opt: %empty
+        | arg_list
+        ;
+
+arg_list: arg_list expr
+        | expr
+        ;
 
 %%
 
