@@ -6,6 +6,8 @@
 
 %%
 
+"decl" { return DECL; }
+
 ";" { return ';'; }
 
 "{" { return '{'; }

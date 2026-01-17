@@ -12,6 +12,8 @@ void yyerror(char const*);
         char *str;
 }
 
+%token DECL
+
 %token <str> ID
 
 %start input
@@ -23,7 +25,15 @@ stmt_list: %empty
          | stmt_list stmt
          ;
 
-stmt: ' '
+stmt: DECL '(' decl_body ')'
+    | expr
+    ;
+
+decl_body: ID expr
+         ;
+
+expr: ID
+    | '{' stmt_list '}'
     ;
 
 %%
