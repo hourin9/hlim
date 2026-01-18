@@ -27,6 +27,12 @@ struct InterpValue evaluate_one(RST_t *st, const struct AST *n)
                         .f32 = n->f32,
                 };
 
+        case AST_Block:
+                return (struct InterpValue){
+                        .type = VAL_Node,
+                        .node = n->body
+                };
+
         case AST_StringLiteral:
                 return (struct InterpValue){
                         .type = VAL_String,
