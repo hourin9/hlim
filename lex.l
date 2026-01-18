@@ -16,7 +16,7 @@
 "(" { return '('; }
 ")" { return ')'; }
 
-\".*\" {
+\"[^"\n]*\" {
         yylval.str = strdup(yytext);
         return STR_LIT;
 }
