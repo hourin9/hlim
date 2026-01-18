@@ -100,6 +100,17 @@ struct InterpValue rst_find_one_scope(RST_t*, char *id, size_t scope);
 
 void print_value(struct InterpValue);
 bool to_bool(struct InterpValue);
+
 struct InterpValue evaluate_list(RST_t*, const struct AST *root);
 struct InterpValue evaluate_one(RST_t*, const struct AST*);
+
+// While evaluate_list() evaluates until AST.next is nullptr and
+// evaluate_one() does not evaluate block's body, evaluate_block()
+// evaluates one node, and if it's a block then the body is evaluated.
+//
+// While making the thing, I realized this might do more harm than
+// good as it'd make the if() evaluates differently from other
+// expressions. I prefer predictability.
+__attribute__((deprecated))
+struct InterpValue evaluate_block(RST_t*, const struct AST *root);
 

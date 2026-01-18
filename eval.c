@@ -127,6 +127,13 @@ bool to_bool(struct InterpValue v)
         }
 }
 
+struct InterpValue evaluate_block(RST_t *rst, const struct AST *root)
+{
+        if (root->type == AST_Block)
+                return evaluate_list(rst, root->body);
+        return evaluate_one(rst, root);
+}
+
 struct InterpValue evaluate_list(RST_t *rst, const struct AST *root)
 {
         const struct AST *cur = root;
