@@ -48,9 +48,7 @@ stmt_list: %empty { $$ = nullptr; }
          }
          ;
 
-stmt: DECL '(' decl_body ')' { $$ = $3; }
-    | IF '(' if_body ')' { $$ = $3; }
-    | LOOP '(' loop_body ')' { $$ = $3; }
+stmt: LOOP '(' loop_body ')' { $$ = $3; }
     | expr { $$ = $1; }
     ;
 
@@ -62,9 +60,11 @@ decl_body: ID expr {
          ;
 
 expr: ID { $$ = id($1); }
+    | DECL '(' decl_body ')' { $$ = $3; }
     | NUM_LIT { $$ = number($1); }
     | STR_LIT { $$ = string($1); }
     | block { $$ = $1; }
+    | IF '(' if_body ')' { $$ = $3; }
     | call
     ;
 
