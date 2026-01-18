@@ -11,34 +11,7 @@ struct InterpValue evaluate_one(
 
         switch (n->type) {
         case AST_Call:
-                struct InterpValue final = { .type = VAL_Nil };
-                if (n->func->sval == nullptr) {
-                        final = evaluate_list(st, n->body->body);
-                        return final;
-                }
-
-                // TODO: move this to separate builtin func handler
-                if (strcmp(n->func->sval, "print") == 0) {
-                        const struct AST *arg = n->args;
-                        while (arg != nullptr) {
-                                struct InterpValue val =
-                                        evaluate_one(st, arg);
-                                print_value(val);
-                                arg = arg->next;
-                        }
-
-                        return final;
-                }
-
-                struct InterpValue func = rst_find_one_scope(
-                        st,
-                        n->func->sval,
-                        st->current);
-
-                if (func.type != VAL_Node)
-                        return final;
-
-                return evaluate_list(st, func.node);
+                return handle_call(st, n);
 
         case AST_Branch:
                 return handle_branching(st, n);
@@ -132,6 +105,40 @@ struct InterpValue handle_branching(RST_t *st, const struct AST *n)
         }
 
         return result;
+}
+
+struct InterpValue handle_call(RST_t *st, const struct AST *n)
+{
+        struct InterpValue final = { .type = VAL_Nil };
+
+        // Anonymous function (calling a block)
+        if (n->func->sval == nullptr) {
+                final = evaluate_list(st, n->body->body);
+                return final;
+        }
+
+        // TODO: move this to separate builtin func handler
+        if (strcmp(n->func->sval, "print") == 0) {
+                const struct AST *arg = n->args;
+                while (arg != nullptr) {
+                        struct InterpValue val =
+                                evaluate_one(st, arg);
+                        print_value(val);
+                        arg = arg->next;
+                }
+
+                return final;
+        }
+
+        struct InterpValue func = rst_find_one_scope(
+                st,
+                n->func->sval,
+                st->current);
+
+        if (func.type != VAL_Node)
+                return final;
+
+        return evaluate_list(st, func.node);
 }
 
 struct InterpValue evaluate_block(RST_t *rst, const struct AST *root)
