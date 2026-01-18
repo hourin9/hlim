@@ -81,3 +81,30 @@ struct InterpValue handle_loop(RST_t *st, const struct AST *n)
         return (struct InterpValue){ .type = VAL_Nil };
 }
 
+struct InterpValue handle_arithmetic(RST_t *st, const struct AST *n)
+{
+        struct InterpValue val = { .type = VAL_Num };
+        float rhs = to_num(evaluate_one(st, n->rhs)),
+              lhs = to_num(evaluate_one(st, n->lhs));
+
+        switch (n->arit) {
+        case ART_Add:
+                val.f32 = rhs + lhs;
+                break;
+
+        case ART_Sub:
+                val.f32 = rhs - lhs;
+                break;
+
+        case ART_Mul:
+                val.f32 = rhs * lhs;
+                break;
+
+        case ART_Div:
+                val.f32 = rhs / lhs;
+                break;
+        }
+
+        return val;
+}
+

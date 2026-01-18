@@ -66,17 +66,17 @@ decl_body: ID expr {
 expr: ID { $$ = id($1); }
     | DECL '(' decl_body ')' { $$ = $3; }
     | NUM_LIT { $$ = number($1); }
-    | binary_operation {}
+    | binary_operation { $$ = $1; }
     | STR_LIT { $$ = string($1); }
     | block { $$ = $1; }
     | IF '(' if_body ')' { $$ = $3; }
     | call
     ;
 
-binary_operation: expr '+' expr {}
-                | expr '-' expr {}
-                | expr '*' expr {}
-                | expr '/' expr {}
+binary_operation: expr '+' expr { $$ = binary(ART_Add, $1, $3); }
+                | expr '-' expr { $$ = binary(ART_Sub, $1, $3); }
+                | expr '*' expr { $$ = binary(ART_Mul, $1, $3); }
+                | expr '/' expr { $$ = binary(ART_Div, $1, $3); }
                 ;
 
 block: '{' stmt_list '}' { $$ = block($2); }

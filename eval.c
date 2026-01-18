@@ -9,6 +9,9 @@ struct InterpValue evaluate_one(RST_t *st, const struct AST *n)
         case AST_Call:
                 return handle_call(st, n);
 
+        case AST_Arit:
+                return handle_arithmetic(st, n);
+
         case AST_Branch:
                 return handle_branching(st, n);
 
@@ -80,6 +83,13 @@ bool to_bool(struct InterpValue v)
         default:
                 return false;
         }
+}
+
+float to_num(struct InterpValue v)
+{
+        if (v.type == VAL_Num)
+                return v.f32;
+        return -1;
 }
 
 struct InterpValue evaluate_block(RST_t *rst, const struct AST *root)

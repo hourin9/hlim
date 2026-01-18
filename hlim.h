@@ -14,10 +14,19 @@ enum ASTType {
         AST_Call,
         AST_Branch,
         AST_Loop,
+        AST_Arit,
+};
+
+enum ArtType {
+        ART_Add,
+        ART_Sub,
+        ART_Mul,
+        ART_Div,
 };
 
 struct AST {
         enum ASTType type;
+        enum ArtType arit;
         float f32;
 
         union {
@@ -54,7 +63,7 @@ struct AST *node(enum ASTType, struct AST *args);
 
 // ASTType is not needed as binary operation is implicitly
 // assumed to be a number. I created the language, I know.
-struct AST *binary(struct AST *lhs, struct AST *rhs);
+struct AST *binary(enum ArtType, struct AST *lhs, struct AST *rhs);
 
 struct AST *leaf(enum ASTType, char *sval);
 struct AST *number(float);
@@ -102,6 +111,7 @@ struct InterpValue rst_find_one_scope(RST_t*, char *id, size_t scope);
 struct InterpValue rst_find(RST_t*, char *id);
 
 void print_value(struct InterpValue);
+float to_num(struct InterpValue);
 bool to_bool(struct InterpValue);
 
 struct InterpValue evaluate_list(RST_t*, const struct AST *root);
@@ -111,6 +121,7 @@ struct InterpValue handle_branching(RST_t*, const struct AST*);
 struct InterpValue handle_call(RST_t*, const struct AST*);
 struct InterpValue handle_decl(RST_t*, const struct AST*);
 struct InterpValue handle_loop(RST_t*, const struct AST*);
+struct InterpValue handle_arithmetic(RST_t*, const struct AST*);
 
 // While evaluate_list() evaluates until AST.next is nullptr and
 // evaluate_one() does not evaluate block's body, evaluate_block()

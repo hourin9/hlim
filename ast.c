@@ -35,10 +35,11 @@ struct AST *node(enum ASTType t, struct AST *args)
         return node;
 }
 
-struct AST *binary(struct AST *lhs, struct AST *rhs)
+struct AST *binary(enum ArtType art, struct AST *lhs, struct AST *rhs)
 {
         struct AST *node = default_node();
-        node->type = AST_NumericLiteral;
+        node->type = AST_Arit;
+        node->arit = art;
         node->lhs = lhs;
         node->rhs = rhs;
         return node;
