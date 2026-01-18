@@ -105,7 +105,10 @@ args_opt: %empty { $$ = nullptr; }
         | arg_list { $$ = $1; }
         ;
 
-arg_list: arg_list expr { $1->next = $2; $$ = $1; }
+arg_list: arg_list expr {
+                append_arg($2, $1);
+                $$ = $1;
+        }
         | expr { $$ = $1; }
         ;
 
