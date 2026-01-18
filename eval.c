@@ -20,17 +20,27 @@ struct InterpValue evaluate_one(
                                 arg = arg->next;
                         }
                 }
-                break;
+                return (struct InterpValue){ .type = VAL_Nil };
 
         case AST_Decl:
                 printf("decl\n");
-                break;
+                return (struct InterpValue){ .type = VAL_Nil };
+
+        case AST_NumericLiteral:
+                return (struct InterpValue){
+                        .type = VAL_Num,
+                        .f32 = n->f32,
+                };
+
+        case AST_StringLiteral:
+                return (struct InterpValue){
+                        .type = VAL_String,
+                        .str = n->sval,
+                };
 
         default:
-                break;
+                return (struct InterpValue){ .type = VAL_Nil };
         }
-
-        return (struct InterpValue){ 0 };
 }
 
 void print_value(struct InterpValue v)
@@ -41,7 +51,7 @@ void print_value(struct InterpValue v)
                 break;
 
         case VAL_Id:
-                printf("%s", v.str);
+                printf("(%s)", v.str);
                 break;
 
         case VAL_Num:
@@ -49,7 +59,7 @@ void print_value(struct InterpValue v)
                 break;
 
         case VAL_String:
-                printf("\"%s\"", v.str);
+                printf("%s", v.str);
                 break;
 
         case VAL_Node:
