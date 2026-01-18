@@ -26,11 +26,15 @@ struct AST *parser_ast;
 %token <str> ID
 %token <str> STR_LIT
 
-%type <node> stmt_list stmt expr block
+%type <node> stmt_list stmt expr block binary_operation
 %type <node> decl_body
 %type <node> call args_opt arg_list
 %type <node> if_body
 %type <node> loop_body
+
+%left '+' '-'
+%left '*' '/'
+%left '('
 
 %start input
 %%
@@ -62,11 +66,18 @@ decl_body: ID expr {
 expr: ID { $$ = id($1); }
     | DECL '(' decl_body ')' { $$ = $3; }
     | NUM_LIT { $$ = number($1); }
+    | binary_operation {}
     | STR_LIT { $$ = string($1); }
     | block { $$ = $1; }
     | IF '(' if_body ')' { $$ = $3; }
     | call
     ;
+
+binary_operation: expr '+' expr {}
+                | expr '-' expr {}
+                | expr '*' expr {}
+                | expr '/' expr {}
+                ;
 
 block: '{' stmt_list '}' { $$ = block($2); }
      ;
