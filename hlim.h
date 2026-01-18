@@ -12,6 +12,7 @@ enum ASTType {
         AST_Block,
         AST_Id,
         AST_Call,
+        AST_Branch,
 };
 
 struct AST {
@@ -26,6 +27,7 @@ struct AST {
         union {
                 struct AST *rhs,
                            *body,
+                           *cond,
                            *func;
         };
 
@@ -58,6 +60,8 @@ struct AST *number(float);
 struct AST *string(char*);
 struct AST *id(char *sval);
 struct AST *block(struct AST *body);
+struct AST *branch(struct AST *cond, struct AST *then,
+        struct AST *otherwise);
 
 enum ValueType {
         VAL_Nil,

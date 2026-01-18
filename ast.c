@@ -84,3 +84,14 @@ struct AST *block(struct AST *body)
         return node;
 }
 
+struct AST *branch(struct AST *cond, struct AST *then,
+        struct AST *otherwise)
+{
+        struct AST *node = default_node();
+        node->type = AST_Branch;
+        node->cond = cond;
+        node->args = then;
+        node->args->next = otherwise;
+        return node;
+}
+
