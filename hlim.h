@@ -97,6 +97,7 @@ SST_t *current_rt_scope(RST_t*);
 SST_t *global_rt_scope(RST_t*);
 void rst_set(RST_t*, char *id, struct InterpValue val);
 struct InterpValue rst_find_one_scope(RST_t*, char *id, size_t scope);
+struct InterpValue rst_find(RST_t*, char *id);
 
 void print_value(struct InterpValue);
 bool to_bool(struct InterpValue);

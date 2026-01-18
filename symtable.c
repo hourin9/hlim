@@ -41,3 +41,13 @@ struct InterpValue rst_find_one_scope(RST_t *rst, char *id, size_t scope)
         return shget(rst->levels[rst->current], id);
 }
 
+struct InterpValue rst_find(RST_t *rst, char *id)
+{
+        struct InterpValue val;
+
+        for (size_t level = rst->current; level > 0; level--)
+                val = rst_find_one_scope(rst, id, level);
+
+        return val;
+}
+
