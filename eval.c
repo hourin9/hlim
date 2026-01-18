@@ -18,6 +18,9 @@ struct InterpValue evaluate_one(RST_t *st, const struct AST *n)
         case AST_Id:
                 return rst_find(st, n->sval);
 
+        case AST_Loop:
+                return handle_loop(st, n);
+
         case AST_NumericLiteral:
                 return (struct InterpValue){
                         .type = VAL_Num,

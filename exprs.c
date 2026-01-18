@@ -73,6 +73,11 @@ struct InterpValue handle_decl(RST_t *st, const struct AST *n)
 
 struct InterpValue handle_loop(RST_t *st, const struct AST *n)
 {
+        struct AST *body = n->args;
+
+        while ((to_bool(evaluate_one(st, n->cond))) == true)
+                evaluate_one(st, body);
+
         return (struct InterpValue){ .type = VAL_Nil };
 }
 
