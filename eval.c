@@ -38,14 +38,12 @@ struct InterpValue evaluate_one(
                 return rst_find_one_scope(st, n->sval, st->current);
 
         case AST_NumericLiteral:
-                printf("num\n");
                 return (struct InterpValue){
                         .type = VAL_Num,
                         .f32 = n->f32,
                 };
 
         case AST_StringLiteral:
-                printf("string\n");
                 return (struct InterpValue){
                         .type = VAL_String,
                         .str = n->sval,
@@ -88,7 +86,6 @@ struct InterpValue evaluate_list(RST_t *rst, const struct AST *root)
         const struct AST *cur = root;
         struct InterpValue v = { 0 };
         while (cur != nullptr) {
-                printf("%d\n", cur->args->type);
                 v = evaluate_one(rst, cur);
                 cur = cur->next;
         }
