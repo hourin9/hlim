@@ -5,6 +5,7 @@
 RST_t init_runtime_symtable()
 {
         RST_t rst = { 0 };
+        rst_new_scope(&rst);
         return rst;
 }
 
@@ -14,7 +15,7 @@ void rst_new_scope(RST_t *rst)
         arrput(rst->levels, nullptr);
 
         struct InterpValue nil = { .type = VAL_Nil };
-        hmdefault(rst->levels[rst->current], nil);
+        shdefault(rst->levels[rst->current], nil);
 }
 
 SST_t *global_rt_scope(RST_t *rst)
@@ -29,7 +30,7 @@ SST_t *current_rt_scope(RST_t *rst)
 
 void rst_set(RST_t *rst, char *id, struct InterpValue val)
 {
-        hmput(rst->levels[rst->current], id, val);
+        shput(rst->levels[rst->current], id, val);
 }
 
 struct InterpValue rst_find_one_scope(RST_t *rst, char *id, size_t scope)
@@ -37,6 +38,6 @@ struct InterpValue rst_find_one_scope(RST_t *rst, char *id, size_t scope)
         if (scope > rst->current)
                 return (struct InterpValue){ .type = VAL_Nil };
 
-        return hmget(rst->levels[rst->current], id);
+        return shget(rst->levels[rst->current], id);
 }
 
