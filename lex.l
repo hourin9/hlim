@@ -74,6 +74,10 @@ static char *_process_str(char *raw)
         return ID;
 }
 
+"//"[^\n]* { ; }
+
+"/*"([^*]|\*+[^*/])*(\*+)"/" { ; }
+
 [ \t\f\v\n]+ { ; }
 
 %%
