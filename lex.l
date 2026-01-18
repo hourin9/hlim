@@ -1,5 +1,40 @@
 %{
 #include "gram.tab.h"
+
+// Consumes "\n" and return the '\n' (newline character).
+static char *_process_str(char *raw)
+{
+        char *dest = raw;
+        char *src = raw;
+        while (*src) {
+                if (*src == '\\' && *(src + 1)) {
+                        src ++;
+                        switch (*src) {
+                        case 'n':
+                                *dest++ = '\n';
+                                break;
+                        case 't':
+                                *dest++ = '\t';
+                                break;
+                        case 'r':
+                                *dest++ = '\r';
+                                break;
+                        case '\\':
+                                *dest++ = '\\';
+                                break;
+                        default:
+                                *dest++ = *src;
+                                break;
+                        }
+                } else
+                        *dest++ = *src;
+                src++;
+        }
+
+        *dest = '\0';
+        return raw;
+}
+
 %}
 
 %option noyywrap
@@ -24,7 +59,8 @@
 "/" { return '/'; }
 
 \"[^"\n]*\" {
-        yylval.str = strndup(yytext + 1, yyleng - 2);
+        char *raw = strndup(yytext + 1, yyleng - 2);
+        yylval.str = _process_str(raw);
         return STR_LIT;
 }
 
