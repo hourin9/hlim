@@ -13,8 +13,6 @@ int main(int argc, char **argv)
         if (yyparse() != 0)
                 return 0;
 
-        recursive_print(stderr, parser_ast, 0);
-
         RST_t rst = init_runtime_symtable();
         struct AST *cur = parser_ast;
         while (cur != nullptr) {
