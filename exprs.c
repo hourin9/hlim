@@ -71,3 +71,8 @@ struct InterpValue handle_decl(RST_t *st, const struct AST *n)
         return v;
 }
 
+struct InterpValue handle_loop(RST_t *st, const struct AST *n)
+{
+        return (struct InterpValue){ .type = VAL_Nil };
+}
+

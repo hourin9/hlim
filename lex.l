@@ -8,6 +8,7 @@
 
 "decl" { return DECL; }
 "if" { return IF; }
+"loop" { return LOOP; }
 
 ";" { return ';'; }
 

@@ -13,6 +13,7 @@ enum ASTType {
         AST_Id,
         AST_Call,
         AST_Branch,
+        AST_Loop,
 };
 
 struct AST {
@@ -62,6 +63,7 @@ struct AST *id(char *sval);
 struct AST *block(struct AST *body);
 struct AST *branch(struct AST *cond, struct AST *then,
         struct AST *otherwise);
+struct AST *loop(struct AST *cond, struct AST *body);
 
 enum ValueType {
         VAL_Nil,
@@ -108,6 +110,7 @@ struct InterpValue evaluate_one(RST_t*, const struct AST*);
 struct InterpValue handle_branching(RST_t*, const struct AST*);
 struct InterpValue handle_call(RST_t*, const struct AST*);
 struct InterpValue handle_decl(RST_t*, const struct AST*);
+struct InterpValue handle_loop(RST_t*, const struct AST*);
 
 // While evaluate_list() evaluates until AST.next is nullptr and
 // evaluate_one() does not evaluate block's body, evaluate_block()

@@ -95,3 +95,12 @@ struct AST *branch(struct AST *cond, struct AST *then,
         return node;
 }
 
+struct AST *loop(struct AST *cond, struct AST *body)
+{
+        struct AST *node = default_node();
+        node->type = AST_Loop;
+        node->cond = cond;
+        node->args = body;
+        return node;
+}
+
