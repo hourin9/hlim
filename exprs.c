@@ -52,4 +52,22 @@ struct InterpValue handle_call(RST_t *st, const struct AST *n)
         return evaluate_list(st, func.node);
 }
 
+struct InterpValue handle_decl(RST_t *st, const struct AST *n)
+{
+        struct InterpValue v;
+        struct AST *id = n->args;
+        struct AST *val = n->args->next;
+
+        if (val->type == AST_Block) {
+                v = (struct InterpValue){
+                        .type = VAL_Node,
+                        .node = val->body,
+                };
+        } else {
+                v = evaluate_one(st, val);
+        }
+
+        rst_set(st, id->sval, v);
+        return v;
+}
 
