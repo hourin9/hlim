@@ -10,8 +10,11 @@ RST_t init_runtime_symtable()
 
 void rst_new_scope(RST_t *rst)
 {
-        arrput(rst->levels, nullptr);
         rst->current ++;
+        arrput(rst->levels, nullptr);
+
+        struct InterpValue nil = { .type = VAL_Nil };
+        hmdefault(rst->levels[rst->current], nil);
 }
 
 SST_t *global_rt_scope(RST_t *rst)
