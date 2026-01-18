@@ -11,9 +11,10 @@ struct InterpValue evaluate_one(
 
         switch (n->type) {
         case AST_Call:
+                struct InterpValue final = { .type = VAL_Nil };
                 if (n->func->sval == nullptr) {
-                        evaluate_list(st, n->body->body);
-                        return (struct InterpValue){ .type = VAL_Nil };
+                        final = evaluate_list(st, n->body->body);
+                        return final;
                 }
 
                 // TODO: move this to separate builtin func handler
@@ -25,13 +26,35 @@ struct InterpValue evaluate_one(
                                 print_value(val);
                                 arg = arg->next;
                         }
+
+                        return final;
                 }
 
-                return (struct InterpValue){ .type = VAL_Nil };
+                struct InterpValue func = rst_find_one_scope(
+                        st,
+                        n->func->sval,
+                        st->current);
+
+                if (func.type != VAL_Node)
+                        return final;
+
+                return evaluate_list(st, func.node);
 
         case AST_Decl:
-                struct InterpValue v = evaluate_one(st, n->args->next);
-                rst_set(st, n->args->sval, v);
+                struct InterpValue v;
+                struct AST *id = n->args;
+                struct AST *val = n->args->next;
+
+                if (val->type == AST_Block) {
+                        v = (struct InterpValue){
+                                .type = VAL_Node,
+                                .node = val->body,
+                        };
+                } else {
+                        v = evaluate_one(st, val);
+                }
+
+                rst_set(st, id->sval, v);
                 return (struct InterpValue){ .type = VAL_Nil };
 
         case AST_Id:
