@@ -95,5 +95,6 @@ void rst_set(RST_t*, char *id, struct InterpValue val);
 struct InterpValue rst_find_one_scope(RST_t*, char *id, size_t scope);
 
 void print_value(struct InterpValue);
+struct InterpValue evaluate_list(RST_t*, const struct AST *root);
 struct InterpValue evaluate_one(RST_t*, const struct AST*);
 
