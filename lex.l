@@ -17,7 +17,7 @@
 ")" { return ')'; }
 
 \"[^"\n]*\" {
-        yylval.str = strdup(yytext);
+        yylval.str = strndup(yytext + 1, yyleng - 2);
         return STR_LIT;
 }
 
