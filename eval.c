@@ -41,16 +41,7 @@ struct InterpValue evaluate_one(
                 return evaluate_list(st, func.node);
 
         case AST_Branch:
-                struct InterpValue result = { .type = VAL_Nil };
-                bool would = to_bool(evaluate_one(st, n->cond));
-                if (would) {
-                        result = evaluate_one(st, n->args);
-                } else {
-                        struct AST *otherwise = n->args->next;
-                        if (otherwise != nullptr)
-                                result = evaluate_one(st, otherwise);
-                }
-                return result;
+                return handle_branching(st, n);
 
         case AST_Decl:
                 struct InterpValue v;
@@ -125,6 +116,22 @@ bool to_bool(struct InterpValue v)
         default:
                 return false;
         }
+}
+
+struct InterpValue handle_branching(RST_t *st, const struct AST *n)
+{
+        struct InterpValue result = { .type = VAL_Nil };
+        bool would = to_bool(evaluate_one(st, n->cond));
+
+        if (would) {
+                result = evaluate_one(st, n->args);
+        } else {
+                struct AST *otherwise = n->args->next;
+                if (otherwise != nullptr)
+                        result = evaluate_one(st, otherwise);
+        }
+
+        return result;
 }
 
 struct InterpValue evaluate_block(RST_t *rst, const struct AST *root)

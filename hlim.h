@@ -104,6 +104,8 @@ bool to_bool(struct InterpValue);
 struct InterpValue evaluate_list(RST_t*, const struct AST *root);
 struct InterpValue evaluate_one(RST_t*, const struct AST*);
 
+struct InterpValue handle_branching(RST_t*, const struct AST*);
+
 // While evaluate_list() evaluates until AST.next is nullptr and
 // evaluate_one() does not evaluate block's body, evaluate_block()
 // evaluates one node, and if it's a block then the body is evaluated.
