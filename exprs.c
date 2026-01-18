@@ -89,19 +89,19 @@ struct InterpValue handle_arithmetic(RST_t *st, const struct AST *n)
 
         switch (n->arit) {
         case ART_Add:
-                val.f32 = rhs + lhs;
+                val.f32 = lhs + rhs;
                 break;
 
         case ART_Sub:
-                val.f32 = rhs - lhs;
+                val.f32 = lhs - rhs;
                 break;
 
         case ART_Mul:
-                val.f32 = rhs * lhs;
+                val.f32 = lhs * rhs;
                 break;
 
         case ART_Div:
-                val.f32 = rhs / lhs;
+                val.f32 = lhs / rhs;
                 break;
         }
 
