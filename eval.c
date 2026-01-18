@@ -23,8 +23,12 @@ struct InterpValue evaluate_one(
                 return (struct InterpValue){ .type = VAL_Nil };
 
         case AST_Decl:
-                printf("decl\n");
+                struct InterpValue v = evaluate_one(st, n->args->next);
+                rst_set(st, n->args->sval, v);
                 return (struct InterpValue){ .type = VAL_Nil };
+
+        case AST_Id:
+                return rst_find_one_scope(st, n->sval, st->current);
 
         case AST_NumericLiteral:
                 return (struct InterpValue){
