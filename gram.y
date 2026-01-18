@@ -19,14 +19,16 @@ struct AST *parser_ast;
 }
 
 %token DECL
+%token IF
 
 %token <f32> NUM_LIT
 %token <str> ID
 %token <str> STR_LIT
 
-%type <node> stmt_list stmt expr
+%type <node> stmt_list stmt expr block
 %type <node> decl_body
 %type <node> call args_opt arg_list
+%type <node> if_body
 
 %start input
 %%
@@ -45,6 +47,7 @@ stmt_list: %empty { $$ = nullptr; }
          ;
 
 stmt: DECL '(' decl_body ')' { $$ = $3; }
+    | IF '(' if_body ')' { $$ = $3; }
     | expr { $$ = $1; }
     ;
 
@@ -58,9 +61,20 @@ decl_body: ID expr {
 expr: ID { $$ = id($1); }
     | NUM_LIT { $$ = number($1); }
     | STR_LIT { $$ = string($1); }
-    | '{' stmt_list '}' { $$ = block($2); }
+    | block { $$ = $1; }
     | call
     ;
+
+block: '{' stmt_list '}' { $$ = block($2); }
+     ;
+
+if_body: expr expr expr {
+                $$ = branch($1, $2, $3);
+       }
+       | expr expr {
+                $$ = branch($1, $2, nullptr);
+       }
+       ;
 
 call: expr '(' args_opt ')' {
         $$ = node(AST_Call, $3);

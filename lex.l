@@ -7,6 +7,7 @@
 %%
 
 "decl" { return DECL; }
+"if" { return IF; }
 
 ";" { return ';'; }
 

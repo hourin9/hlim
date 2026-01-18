@@ -40,6 +40,18 @@ struct InterpValue evaluate_one(
 
                 return evaluate_list(st, func.node);
 
+        case AST_Branch:
+                struct InterpValue result = { .type = VAL_Nil };
+                bool would = to_bool(evaluate_one(st, n->cond));
+                if (would) {
+                        result = evaluate_one(st, n->args);
+                } else {
+                        struct AST *otherwise = n->args->next;
+                        if (otherwise != nullptr)
+                                result = evaluate_one(st, otherwise);
+                }
+                return result;
+
         case AST_Decl:
                 struct InterpValue v;
                 struct AST *id = n->args;
@@ -102,6 +114,17 @@ void print_value(struct InterpValue v)
         }
 
         fflush(stdout);
+}
+
+bool to_bool(struct InterpValue v)
+{
+        switch (v.type) {
+        case VAL_Num:
+                return v.f32 != 0;
+
+        default:
+                return false;
+        }
 }
 
 struct InterpValue evaluate_list(RST_t *rst, const struct AST *root)
