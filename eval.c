@@ -12,7 +12,7 @@ struct InterpValue evaluate_one(
         switch (n->type) {
         case AST_Call:
                 if (n->func->sval == nullptr) {
-                        evaluate_list(st, n->body);
+                        evaluate_list(st, n->body->body);
                         return (struct InterpValue){ .type = VAL_Nil };
                 }
 

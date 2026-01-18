@@ -76,3 +76,11 @@ struct AST *id(char *sval)
         return node;
 }
 
+struct AST *block(struct AST *body)
+{
+        struct AST *node = default_node();
+        node->type = AST_Block;
+        node->body = body;
+        return node;
+}
+

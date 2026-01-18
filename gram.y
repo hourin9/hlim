@@ -58,7 +58,7 @@ decl_body: ID expr {
 expr: ID { $$ = id($1); }
     | NUM_LIT { $$ = number($1); }
     | STR_LIT { $$ = string($1); }
-    | '{' stmt_list '}' { $$ =$2; }
+    | '{' stmt_list '}' { $$ = block($2); }
     | call
     ;
 

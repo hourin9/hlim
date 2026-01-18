@@ -9,6 +9,7 @@ enum ASTType {
         AST_Decl,
         AST_StringLiteral,
         AST_NumericLiteral,
+        AST_Block,
         AST_Id,
         AST_Call,
 };
@@ -56,6 +57,7 @@ struct AST *leaf(enum ASTType, char *sval);
 struct AST *number(float);
 struct AST *string(char*);
 struct AST *id(char *sval);
+struct AST *block(struct AST *body);
 
 enum ValueType {
         VAL_Nil,
