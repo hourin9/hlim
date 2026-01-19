@@ -114,6 +114,7 @@ typedef struct RuntimeSymTable RST_t;
 
 RST_t init_runtime_symtable();
 void rst_new_scope(RST_t*);
+void rst_pop_scope(RST_t*);
 
 SST_t *current_rt_scope(RST_t*);
 SST_t *global_rt_scope(RST_t*);

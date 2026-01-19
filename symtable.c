@@ -24,6 +24,14 @@ void rst_new_scope(RST_t *rst)
         rst->current = scope;
 }
 
+void rst_pop_scope(RST_t *rst)
+{
+        if (rst->current->parent == nullptr)
+                return;
+        struct SSTWrapper *old = rst->current;
+        rst->current = old->parent;
+}
+
 SST_t *global_rt_scope(RST_t *rst)
 {
         struct SSTWrapper *cur = rst->current;
