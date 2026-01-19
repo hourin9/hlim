@@ -23,17 +23,18 @@ struct InterpValue handle_branching(RST_t *st, const struct AST *n)
 
 struct InterpValue handle_call(RST_t *st, const struct AST *n)
 {
+        struct SSTWrapper *caller_scope = st->current;
         struct InterpValue final = { .type = VAL_Nil };
-
         struct InterpValue *args = evaluate_arg_list(st, n->args);
 
         // Anonymous function (calling a block)
         if (n->func->sval == nullptr) {
-                // TODO: use closure here too
-                rst_new_scope(st);
+                struct InterpValue anon = evaluate_one(st, n->body);
+
+                rst_closure(st, anon.scope);
                 push_args_simple(st, args);
-                final = evaluate_list(st, n->body->body);
-                rst_pop_scope(st);
+                final = evaluate_list(st, anon.node);
+                st->current = caller_scope;
 
                 arrfree(args);
                 return final;
@@ -56,7 +57,7 @@ struct InterpValue handle_call(RST_t *st, const struct AST *n)
         rst_closure(st, func.scope);
         push_args_simple(st, args);
         final = evaluate_list(st, func.node);
-        rst_pop_scope(st);
+        st->current = caller_scope;
 
         arrfree(args);
         return final;

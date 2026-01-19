@@ -38,7 +38,8 @@ struct InterpValue evaluate_one(RST_t *st, const struct AST *n)
         case AST_Block:
                 return (struct InterpValue){
                         .type = VAL_Node,
-                        .node = n->body
+                        .node = n->body,
+                        .scope = st->current,
                 };
 
         case AST_StringLiteral:
