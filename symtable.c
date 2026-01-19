@@ -45,9 +45,25 @@ SST_t *current_rt_scope(RST_t *rst)
         return rst->current->table;
 }
 
-void rst_set(RST_t *rst, char *id, struct InterpValue val)
+void rst_declare(RST_t *rst, char *id, struct InterpValue val)
 {
         shput(rst->current->table, id, val);
+}
+
+void rst_assign(RST_t *rst, char *id, struct InterpValue val)
+{
+        struct SSTWrapper *cur = rst->current;
+
+        while (cur != NULL) {
+                int index = shgeti(cur->table, id);
+
+                if (index != -1) {
+                        cur->table[index].value = val;
+                        return;
+                }
+
+                cur = cur->parent;
+        }
 }
 
 struct InterpValue rst_find(RST_t *rst, char *id)

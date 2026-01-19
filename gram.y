@@ -18,6 +18,7 @@ struct AST *parser_ast;
         struct AST *node;
 }
 
+%token ASN
 %token DECL
 %token IF
 %token LOOP
@@ -27,7 +28,7 @@ struct AST *parser_ast;
 %token <str> STR_LIT
 
 %type <node> stmt_list stmt expr block binary_operation
-%type <node> decl_body
+%type <node> decl_body asn_body
 %type <node> call args_opt arg_list
 %type <node> if_body
 %type <node> loop_body
@@ -63,8 +64,16 @@ decl_body: ID expr {
          }
          ;
 
+asn_body: ID expr {
+                struct AST *args = string($1);
+                args->next = $2;
+                $$ = node(AST_Asn, args);
+        }
+        ;
+
 expr: ID { $$ = id($1); }
     | DECL '(' decl_body ')' { $$ = $3; }
+    | ASN '(' asn_body ')' { $$ = $3; }
     | NUM_LIT { $$ = number($1); }
     | binary_operation { $$ = $1; }
     | STR_LIT { $$ = string($1); }

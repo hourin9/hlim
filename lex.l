@@ -41,6 +41,7 @@ static char *_process_str(char *raw)
 
 %%
 
+"asn" { return ASN; }
 "decl" { return DECL; }
 "if" { return IF; }
 "loop" { return LOOP; }

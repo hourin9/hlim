@@ -12,6 +12,9 @@ struct InterpValue evaluate_one(RST_t *st, const struct AST *n)
         case AST_Arit:
                 return handle_arithmetic(st, n);
 
+        case AST_Asn:
+                return handle_asn(st, n);
+
         case AST_Branch:
                 return handle_branching(st, n);
 

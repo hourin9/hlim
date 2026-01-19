@@ -6,6 +6,7 @@
 
 enum ASTType {
         AST_Invalid,
+        AST_Asn,
         AST_Decl,
         AST_StringLiteral,
         AST_NumericLiteral,
@@ -118,7 +119,8 @@ void rst_pop_scope(RST_t*);
 
 SST_t *current_rt_scope(RST_t*);
 SST_t *global_rt_scope(RST_t*);
-void rst_set(RST_t*, char *id, struct InterpValue val);
+void rst_declare(RST_t*, char *id, struct InterpValue val);
+void rst_assign(RST_t*, char *id, struct InterpValue val);
 struct InterpValue rst_find(RST_t*, char *id);
 
 void print_value(struct InterpValue);
@@ -131,6 +133,7 @@ struct InterpValue evaluate_one(RST_t*, const struct AST*);
 struct InterpValue handle_branching(RST_t*, const struct AST*);
 struct InterpValue handle_call(RST_t*, const struct AST*);
 struct InterpValue handle_decl(RST_t*, const struct AST*);
+struct InterpValue handle_asn(RST_t*, const struct AST*);
 struct InterpValue handle_loop(RST_t*, const struct AST*);
 struct InterpValue handle_arithmetic(RST_t*, const struct AST*);
 
