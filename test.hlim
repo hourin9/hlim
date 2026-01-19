@@ -14,7 +14,13 @@ main(10)
 print(a "\n")
 
 decl(x 10)
-decl(f { print(x) })
+decl(f { print(x "\n") })
 decl(g { decl(x 5) f() })
 g() // Should print 10
+
+decl(print_if_even {
+    if(r0%2 == 0 print(r0 "\n"))
+})
+
+print_if_even(12)
 
