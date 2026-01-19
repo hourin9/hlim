@@ -26,6 +26,10 @@ struct InterpValue handle_call(RST_t *st, const struct AST *n)
 
         // Anonymous function (calling a block)
         if (n->func->sval == nullptr) {
+                __attribute__((unused))
+                struct InterpValue *args =
+                        evaluate_arg_list(st, n->func->args);
+
                 // TODO: use closure here too
                 rst_new_scope(st);
                 final = evaluate_list(st, n->body->body);
@@ -50,6 +54,10 @@ struct InterpValue handle_call(RST_t *st, const struct AST *n)
 
         if (func.type != VAL_Node)
                 return final;
+
+        __attribute__((unused))
+        struct InterpValue *args =
+                evaluate_arg_list(st, n->func->args);
 
         rst_closure(st, func.scope);
         final = evaluate_list(st, func.node);

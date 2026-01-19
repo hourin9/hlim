@@ -1,5 +1,7 @@
 #include "hlim.h"
 
+#include "external/stb_ds.h"
+
 struct InterpValue evaluate_one(RST_t *st, const struct AST *n)
 {
         if (n == nullptr)
@@ -111,5 +113,18 @@ struct InterpValue evaluate_list(RST_t *rst, const struct AST *root)
                 cur = cur->next;
         }
         return v;
+}
+
+struct InterpValue *evaluate_arg_list(RST_t *rst, const struct AST *args)
+{
+        struct InterpValue *argv = nullptr;
+
+        const struct AST *arg = args;
+        while (arg != nullptr) {
+                struct InterpValue val = evaluate_one(rst, arg);
+                arrput(argv, val);
+        }
+
+        return argv;
 }
 

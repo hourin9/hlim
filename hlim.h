@@ -130,6 +130,7 @@ bool to_bool(struct InterpValue);
 
 struct InterpValue evaluate_list(RST_t*, const struct AST *root);
 struct InterpValue evaluate_one(RST_t*, const struct AST*);
+struct InterpValue *evaluate_arg_list(RST_t*, const struct AST*);
 
 struct InterpValue handle_branching(RST_t*, const struct AST*);
 struct InterpValue handle_call(RST_t*, const struct AST*);
