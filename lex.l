@@ -46,6 +46,8 @@ static char *_process_str(char *raw)
 "if" { return IF; }
 "loop" { return LOOP; }
 
+"->" { return ARROW; }
+
 ";" { return ';'; }
 
 "{" { return '{'; }

@@ -34,6 +34,7 @@ struct AST *parser_ast;
 %type <node> decl_body asn_body
 %type <node> call args_opt arg_list
 %type <node> if_body loop_body
+%type <node> pipeline
 
 %left ARROW
 %left '+' '-'
@@ -87,6 +88,7 @@ expr: DECL '(' decl_body ')' { $$ = $3; }
     | binary_operation { $$ = $1; }
     | NOT expr { $$ = binary(ART_Not, $2, nullptr); }
     | IF '(' if_body ')' { $$ = $3; }
+    | pipeline { $$ = $1; }
     | call { $$ = $1; }
     ;
 
@@ -129,6 +131,14 @@ arg_list: arg_list expr {
         }
         | expr { $$ = $1; }
         ;
+
+pipeline: expr ARROW call {
+                struct AST *call = $3;
+                struct AST *args = call->args;
+                call->args = $1;
+                call->args->next = args;
+                $$ = call;
+        }
 
 %%
 
