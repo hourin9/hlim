@@ -24,13 +24,10 @@ struct InterpValue handle_call(RST_t *st, const struct AST *n)
 {
         struct InterpValue final = { .type = VAL_Nil };
 
-        // FIXME: evaluate args in outer scope first
+        struct InterpValue *args = evaluate_arg_list(st, n->args);
 
         // Anonymous function (calling a block)
         if (n->func->sval == nullptr) {
-                struct InterpValue *args =
-                        evaluate_arg_list(st, n->args);
-
                 // TODO: use closure here too
                 rst_new_scope(st);
                 push_args_simple(st, args);
@@ -43,14 +40,10 @@ struct InterpValue handle_call(RST_t *st, const struct AST *n)
 
         // TODO: move this to separate builtin func handler
         if (strcmp(n->func->sval, "print") == 0) {
-                const struct AST *arg = n->args;
-                while (arg != nullptr) {
-                        struct InterpValue val =
-                                evaluate_one(st, arg);
-                        print_value(val);
-                        arg = arg->next;
-                }
+                for (size_t i=0; i<arrlen(args); i++)
+                        print_value(args[i]);
 
+                arrfree(args);
                 return final;
         }
 
@@ -58,9 +51,6 @@ struct InterpValue handle_call(RST_t *st, const struct AST *n)
 
         if (func.type != VAL_Node)
                 return final;
-
-        struct InterpValue *args =
-                evaluate_arg_list(st, n->args);
 
         rst_closure(st, func.scope);
         push_args_simple(st, args);
