@@ -143,6 +143,14 @@ struct InterpValue handle_arithmetic(RST_t *st, const struct AST *n)
         case ART_Div:
                 val.f32 = lhs / rhs;
                 break;
+
+        case ART_Mod:
+                val.f32 = (int)lhs % (int)rhs;
+                break;
+
+        case ART_Eq:
+                val.f32 = (int)(lhs == rhs);
+                break;
         }
 
         return val;

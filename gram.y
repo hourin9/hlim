@@ -20,6 +20,7 @@ struct AST *parser_ast;
 
 %token ASN
 %token DECL
+%token EQ
 %token IF
 %token LOOP
 
@@ -34,7 +35,8 @@ struct AST *parser_ast;
 %type <node> loop_body
 
 %left '+' '-'
-%left '*' '/'
+%left '*' '/' '%'
+%left EQ
 %left '('
 
 %start input
@@ -86,6 +88,8 @@ binary_operation: expr '+' expr { $$ = binary(ART_Add, $1, $3); }
                 | expr '-' expr { $$ = binary(ART_Sub, $1, $3); }
                 | expr '*' expr { $$ = binary(ART_Mul, $1, $3); }
                 | expr '/' expr { $$ = binary(ART_Div, $1, $3); }
+                | expr '%' expr { $$ = binary(ART_Mod, $1, $3); }
+                | expr EQ expr { $$ = binary(ART_Eq, $1, $3); }
                 ;
 
 block: '{' stmt_list '}' { $$ = block($2); }

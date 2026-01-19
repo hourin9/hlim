@@ -23,6 +23,8 @@ enum ArtType {
         ART_Sub,
         ART_Mul,
         ART_Div,
+        ART_Mod,
+        ART_Eq
 };
 
 struct AST {
