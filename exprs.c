@@ -24,7 +24,9 @@ struct InterpValue handle_call(RST_t *st, const struct AST *n)
 
         // Anonymous function (calling a block)
         if (n->func->sval == nullptr) {
+                rst_new_scope(st);
                 final = evaluate_list(st, n->body->body);
+                rst_pop_scope(st);
                 return final;
         }
 
@@ -46,7 +48,10 @@ struct InterpValue handle_call(RST_t *st, const struct AST *n)
         if (func.type != VAL_Node)
                 return final;
 
-        return evaluate_list(st, func.node);
+        rst_new_scope(st);
+        struct InterpValue ret = evaluate_list(st, func.node);
+        rst_pop_scope(st);
+        return ret;
 }
 
 struct InterpValue handle_decl(RST_t *st, const struct AST *n)
