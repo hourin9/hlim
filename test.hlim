@@ -10,5 +10,10 @@ decl(main {
 main()
 
 // If it prints Nil the scoping works
-print(a)
+print(a "\n")
+
+decl(x 10)
+decl(f { print(x) })
+decl(g { decl(x 5) f() })
+g() // Should print 10
 

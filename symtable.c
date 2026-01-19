@@ -32,6 +32,15 @@ void rst_pop_scope(RST_t *rst)
         rst->current = old->parent;
 }
 
+void rst_closure(RST_t *rst, struct SSTWrapper *capture)
+{
+        struct SSTWrapper *scope = malloc(sizeof(*scope));
+        scope->table = nullptr;
+
+        scope->parent = capture;
+        rst->current = scope;
+}
+
 SST_t *global_rt_scope(RST_t *rst)
 {
         struct SSTWrapper *cur = rst->current;
