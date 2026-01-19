@@ -9,10 +9,12 @@ override CFLAGS += $(INTERNAL_CFLAGS)
 SRC_FILES := $(wildcard *.c)
 OBJ_FILES := $(SRC_FILES:.c=.o)
 
+LIBS := -lm
+
 all: hlim
 
 hlim: $(OBJ_FILES) gram.tab.o lex.yy.o
-	$(CC) $^ $(CFLAGS) -o $@
+	$(CC) $^ $(CFLAGS) $(LIBS) -o $@
 
 lex.yy.o: lex.yy.c gram.tab.h
 	$(CC) -c $< $(CFLAGS) -o $@ \

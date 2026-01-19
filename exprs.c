@@ -1,5 +1,6 @@
 #include "hlim.h"
 
+#include <math.h>
 #include <string.h>
 
 #include "external/stb_ds.h"
@@ -135,7 +136,7 @@ struct InterpValue handle_arithmetic(RST_t *st, const struct AST *n)
                 break;
 
         case ART_Mod:
-                val.f32 = (int)lhs % (int)rhs;
+                val.f32 = fmodf(lhs, rhs);
                 break;
 
         case ART_Eq:
