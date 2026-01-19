@@ -23,6 +23,8 @@ struct AST *parser_ast;
 %token EQ
 %token IF
 %token LOOP
+%token NEQ
+%token NOT
 
 %token <f32> NUM_LIT
 %token <str> ID
@@ -36,7 +38,7 @@ struct AST *parser_ast;
 
 %left '+' '-'
 %left '*' '/' '%'
-%left EQ
+%left EQ NEQ NOT
 %left '('
 
 %start input
@@ -78,6 +80,7 @@ expr: ID { $$ = id($1); }
     | ASN '(' asn_body ')' { $$ = $3; }
     | NUM_LIT { $$ = number($1); }
     | binary_operation { $$ = $1; }
+    | NOT expr { $$ = binary(ART_Not, $2, nullptr); }
     | STR_LIT { $$ = string($1); }
     | block { $$ = $1; }
     | IF '(' if_body ')' { $$ = $3; }
@@ -90,6 +93,7 @@ binary_operation: expr '+' expr { $$ = binary(ART_Add, $1, $3); }
                 | expr '/' expr { $$ = binary(ART_Div, $1, $3); }
                 | expr '%' expr { $$ = binary(ART_Mod, $1, $3); }
                 | expr EQ expr { $$ = binary(ART_Eq, $1, $3); }
+                | expr NEQ expr { $$ = binary(ART_Neq, $1, $3); }
                 ;
 
 block: '{' stmt_list '}' { $$ = block($2); }

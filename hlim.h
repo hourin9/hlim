@@ -24,7 +24,9 @@ enum ArtType {
         ART_Mul,
         ART_Div,
         ART_Mod,
-        ART_Eq
+        ART_Eq,
+        ART_Not,
+        ART_Neq,
 };
 
 struct AST {

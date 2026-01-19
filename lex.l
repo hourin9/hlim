@@ -61,6 +61,8 @@ static char *_process_str(char *raw)
 "%" { return '%'; }
 
 "==" { return EQ; }
+"!=" { return NEQ; }
+"!" { return NOT; }
 
 \"[^"\n]*\" {
         char *raw = strndup(yytext + 1, yyleng - 2);

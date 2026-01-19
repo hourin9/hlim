@@ -142,6 +142,14 @@ struct InterpValue handle_arithmetic(RST_t *st, const struct AST *n)
         case ART_Eq:
                 val.f32 = (int)(lhs == rhs);
                 break;
+
+        case ART_Neq:
+                val.f32 = (int)(lhs != rhs);
+                break;
+
+        case ART_Not:
+                val.f32 = !lhs;
+                break;
         }
 
         return val;
