@@ -1,13 +1,14 @@
 decl(main {
-        decl(a 10)
-        loop(a {
-            print("a is " a ", " )
-            print("a*a is " a*a "\n")
-            asn(a a-1)
-        }())
+    // r0 is supplied by function arg
+    decl(a r0)
+    loop(a {
+        print("a is " a ", " )
+        print("a*a is " a*a "\n")
+        asn(a a-1)
+    }())
 })
 
-main()
+main(10)
 
 // If it prints Nil the scoping works
 print(a "\n")

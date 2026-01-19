@@ -123,6 +123,7 @@ struct InterpValue *evaluate_arg_list(RST_t *rst, const struct AST *args)
         while (arg != nullptr) {
                 struct InterpValue val = evaluate_one(rst, arg);
                 arrput(argv, val);
+                arg = arg->next;
         }
 
         return argv;

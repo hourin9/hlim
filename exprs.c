@@ -2,6 +2,8 @@
 
 #include <string.h>
 
+#include "external/stb_ds.h"
+
 struct InterpValue handle_branching(RST_t *st, const struct AST *n)
 {
         struct InterpValue result = { .type = VAL_Nil };
@@ -26,14 +28,16 @@ struct InterpValue handle_call(RST_t *st, const struct AST *n)
 
         // Anonymous function (calling a block)
         if (n->func->sval == nullptr) {
-                __attribute__((unused))
                 struct InterpValue *args =
-                        evaluate_arg_list(st, n->func->args);
+                        evaluate_arg_list(st, n->args);
 
                 // TODO: use closure here too
                 rst_new_scope(st);
+                push_args_simple(st, args);
                 final = evaluate_list(st, n->body->body);
                 rst_pop_scope(st);
+
+                arrfree(args);
                 return final;
         }
 
@@ -55,13 +59,15 @@ struct InterpValue handle_call(RST_t *st, const struct AST *n)
         if (func.type != VAL_Node)
                 return final;
 
-        __attribute__((unused))
         struct InterpValue *args =
-                evaluate_arg_list(st, n->func->args);
+                evaluate_arg_list(st, n->args);
 
         rst_closure(st, func.scope);
+        push_args_simple(st, args);
         final = evaluate_list(st, func.node);
         rst_pop_scope(st);
+
+        arrfree(args);
         return final;
 }
 
