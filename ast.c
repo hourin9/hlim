@@ -105,3 +105,10 @@ struct AST *loop(struct AST *cond, struct AST *body)
         return node;
 }
 
+struct AST *call(struct AST *func, struct AST *args)
+{
+        struct AST *call = node(AST_Call, args);
+        call->func = func;
+        return call;
+}
+

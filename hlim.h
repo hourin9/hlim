@@ -78,6 +78,7 @@ struct AST *block(struct AST *body);
 struct AST *branch(struct AST *cond, struct AST *then,
         struct AST *otherwise);
 struct AST *loop(struct AST *cond, struct AST *body);
+struct AST *call(struct AST *func, struct AST *argv);
 
 enum ValueType {
         VAL_Nil,

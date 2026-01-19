@@ -30,16 +30,17 @@ struct AST *parser_ast;
 %token <str> ID
 %token <str> STR_LIT
 
-%type <node> stmt_list stmt expr block binary_operation
+%type <node> stmt_list stmt expr block binary_operation primary
 %type <node> decl_body asn_body
 %type <node> call args_opt arg_list
-%type <node> if_body
-%type <node> loop_body
+%type <node> if_body loop_body
 
+%left ARROW
 %left '+' '-'
 %left '*' '/' '%'
-%left EQ NEQ NOT
+%left EQ NEQ
 %left '('
+%nonassoc NOT
 
 %start input
 %%
@@ -75,16 +76,18 @@ asn_body: ID expr {
         }
         ;
 
-expr: ID { $$ = id($1); }
-    | DECL '(' decl_body ')' { $$ = $3; }
+primary: NUM_LIT { $$ = number($1); }
+       | STR_LIT { $$ = string($1); }
+       | ID { $$ = id($1); }
+       | block { $$ = $1; }
+       ;
+
+expr: DECL '(' decl_body ')' { $$ = $3; }
     | ASN '(' asn_body ')' { $$ = $3; }
-    | NUM_LIT { $$ = number($1); }
     | binary_operation { $$ = $1; }
     | NOT expr { $$ = binary(ART_Not, $2, nullptr); }
-    | STR_LIT { $$ = string($1); }
-    | block { $$ = $1; }
     | IF '(' if_body ')' { $$ = $3; }
-    | call
+    | call { $$ = $1; }
     ;
 
 binary_operation: expr '+' expr { $$ = binary(ART_Add, $1, $3); }
@@ -112,10 +115,8 @@ loop_body: expr expr {
          }
          ;
 
-call: expr '(' args_opt ')' {
-        $$ = node(AST_Call, $3);
-        $$->func = $1;
-    }
+call: primary { $$ = $1; }
+    | call '(' args_opt ')' { $$ = call($1, $3); }
     ;
 
 args_opt: %empty { $$ = nullptr; }
