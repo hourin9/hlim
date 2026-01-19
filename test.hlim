@@ -3,10 +3,12 @@ decl(main {
         loop(a {
             print("a is " a ", " )
             print("a*a is " a*a "\n")
-            decl(a a-1)
+            asn(a a-1)
         }())
 })
 
 main()
-print(main)
+
+// If it prints Nil the scoping works
+print(a)
 
