@@ -1,53 +1,57 @@
 #include "hlim.h"
 
+#include <stdlib.h>
+
 #include "external/stb_ds.h"
 
 RST_t init_runtime_symtable()
 {
         RST_t rst = { 0 };
-        rst_new_scope(&rst);
+        struct SSTWrapper *global = malloc(sizeof(*global));
+        global->table = nullptr;
+        global->parent = nullptr;
+        rst.current = global;
         return rst;
 }
 
 void rst_new_scope(RST_t *rst)
 {
-        rst->current ++;
-        arrput(rst->levels, nullptr);
-
+        struct SSTWrapper *scope = malloc(sizeof(*scope));
         struct InterpValue nil = { .type = VAL_Nil };
-        shdefault(rst->levels[rst->current], nil);
+        scope->table = nullptr;
+        scope->parent = rst->current;
+        shdefault(scope->table, nil);
+        rst->current = scope;
 }
 
 SST_t *global_rt_scope(RST_t *rst)
 {
-        return rst->levels[0];
+        struct SSTWrapper *cur = rst->current;
+        while (cur->parent != nullptr)
+                cur = cur->parent;
+        return cur->table;
 }
 
 SST_t *current_rt_scope(RST_t *rst)
 {
-        return rst->levels[rst->current];
+        return rst->current->table;
 }
 
 void rst_set(RST_t *rst, char *id, struct InterpValue val)
 {
-        shput(rst->levels[rst->current], id, val);
-}
-
-struct InterpValue rst_find_one_scope(RST_t *rst, char *id, size_t scope)
-{
-        if (scope > rst->current)
-                return (struct InterpValue){ .type = VAL_Nil };
-
-        return shget(rst->levels[rst->current], id);
+        shput(rst->current->table, id, val);
 }
 
 struct InterpValue rst_find(RST_t *rst, char *id)
 {
-        struct InterpValue val;
+        struct SSTWrapper *cur = rst->current;
+        while (cur != nullptr) {
+                int index = shgeti(cur->table, id);
+                if (index != -1)
+                        return cur->table[index].value;
+                cur = cur->parent;
+        }
 
-        for (size_t level = rst->current; level > 0; level--)
-                val = rst_find_one_scope(rst, id, level);
-
-        return val;
+        return (struct InterpValue){ .type = VAL_Nil };
 }
 

@@ -82,6 +82,7 @@ enum ValueType {
         VAL_Node,
 };
 
+struct SSTWrapper;
 struct InterpValue {
         enum ValueType type;
         union {
@@ -89,14 +90,24 @@ struct InterpValue {
                 char *str;
                 struct AST *node;
         };
+
+        struct SSTWrapper *scope;
 };
 
-typedef struct {char *key; struct InterpValue value;} ScopeSymTable_t;
+typedef struct {
+        char *key;
+        struct InterpValue value;
+} ScopeSymTable_t;
+
 typedef ScopeSymTable_t SST_t;
 
+struct SSTWrapper {
+        SST_t *table;
+        struct SSTWrapper *parent;
+};
+
 struct RuntimeSymTable {
-        SST_t **levels;
-        size_t current;
+        struct SSTWrapper *current;
 };
 
 typedef struct RuntimeSymTable RST_t;
@@ -107,7 +118,6 @@ void rst_new_scope(RST_t*);
 SST_t *current_rt_scope(RST_t*);
 SST_t *global_rt_scope(RST_t*);
 void rst_set(RST_t*, char *id, struct InterpValue val);
-struct InterpValue rst_find_one_scope(RST_t*, char *id, size_t scope);
 struct InterpValue rst_find(RST_t*, char *id);
 
 void print_value(struct InterpValue);

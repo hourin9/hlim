@@ -41,10 +41,7 @@ struct InterpValue handle_call(RST_t *st, const struct AST *n)
                 return final;
         }
 
-        struct InterpValue func = rst_find_one_scope(
-                st,
-                n->func->sval,
-                st->current);
+        struct InterpValue func = rst_find(st, n->func->sval);
 
         if (func.type != VAL_Node)
                 return final;
