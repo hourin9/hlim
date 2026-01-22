@@ -75,6 +75,8 @@ struct InterpValue handle_decl(RST_t *st, const struct AST *n)
                         .node = val->body,
                         .scope = st->current,
                 };
+
+                v.node->params = val->params;
         } else {
                 v = evaluate_one(st, val);
         }
@@ -95,6 +97,8 @@ struct InterpValue handle_asn(RST_t *st, const struct AST *n)
                         .node = val->body,
                         .scope = st->current,
                 };
+
+                v.node->params = val->params;
         } else {
                 v = evaluate_one(st, val);
         }
