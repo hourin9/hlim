@@ -89,6 +89,7 @@ primary: NUM_LIT { $$ = number($1); }
        | STR_LIT { $$ = string($1); }
        | ID { $$ = id($1); }
        | block { $$ = $1; }
+       | '[' expr ']' { $$ = $2; }
        ;
 
 expr: DECL '(' decl_body ')' { $$ = $3; }
