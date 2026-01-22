@@ -32,7 +32,7 @@ struct InterpValue handle_call(RST_t *st, const struct AST *n)
                 struct InterpValue anon = evaluate_one(st, n->body);
 
                 rst_closure(st, anon.scope);
-                push_args_simple(st, args);
+                push_args_params(st, anon.node->params, args);
                 final = evaluate_list(st, anon.node);
                 st->current = caller_scope;
 
@@ -55,7 +55,7 @@ struct InterpValue handle_call(RST_t *st, const struct AST *n)
                 return final;
 
         rst_closure(st, func.scope);
-        push_args_simple(st, args);
+        push_args_params(st, func.node->params, args);
         final = evaluate_list(st, func.node);
         st->current = caller_scope;
 

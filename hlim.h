@@ -146,6 +146,8 @@ struct InterpValue handle_asn(RST_t*, const struct AST*);
 struct InterpValue handle_loop(RST_t*, const struct AST*);
 struct InterpValue handle_arithmetic(RST_t*, const struct AST*);
 
+void push_args_params(RST_t*, const struct AST *params,
+        struct InterpValue *argv);
 void push_args_simple(RST_t*, struct InterpValue *argv);
 
 // While evaluate_list() evaluates until AST.next is nullptr and
