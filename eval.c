@@ -12,6 +12,8 @@ struct InterpValue evaluate_one(RST_t *st, const struct AST *n)
                 return handle_call(st, n);
 
         case AST_Arit:
+                if (n->arit == ART_Index)
+                        return handle_indexing(st, n);
                 return handle_arithmetic(st, n);
 
         case AST_Asn:

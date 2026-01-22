@@ -104,7 +104,8 @@ expr: DECL '(' decl_body ')' { $$ = $3; }
     | list_index
     ;
 
-list_index: expr ':' expr {}
+list_index: expr ':' expr { $$ = binary(ART_Index, $1, $3); }
+          ;
 
 binary_operation: expr '+' expr { $$ = binary(ART_Add, $1, $3); }
                 | expr '-' expr { $$ = binary(ART_Sub, $1, $3); }
@@ -160,6 +161,7 @@ pipeline: expr ARROW call {
                 call->args->next = args;
                 $$ = call;
         }
+        ;
 
 %%
 

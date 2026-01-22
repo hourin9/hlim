@@ -111,6 +111,21 @@ struct InterpValue handle_loop(RST_t *st, const struct AST *n)
         return (struct InterpValue){ .type = VAL_Nil };
 }
 
+struct InterpValue handle_indexing(RST_t *st, const struct AST *n)
+{
+        struct InterpValue list = evaluate_one(st, n->lhs);
+        if (list.type != VAL_Node)
+                return (struct InterpValue){ .type = VAL_Nil };
+
+        size_t index = to_num(evaluate_one(st, n->rhs));
+
+        const struct AST *cur = list.node->body;
+        for (size_t i=0; i<index; i++)
+                cur = cur->next;
+
+        return evaluate_one(st, cur);
+}
+
 struct InterpValue handle_arithmetic(RST_t *st, const struct AST *n)
 {
         struct InterpValue val = { .type = VAL_Num };
@@ -148,6 +163,9 @@ struct InterpValue handle_arithmetic(RST_t *st, const struct AST *n)
 
         case ART_Not:
                 val.f32 = !lhs;
+                break;
+
+        default:
                 break;
         }
 

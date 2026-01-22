@@ -27,6 +27,8 @@ enum ArtType {
         ART_Eq,
         ART_Not,
         ART_Neq,
+
+        ART_Index,
 };
 
 struct AST {
@@ -143,6 +145,7 @@ struct InterpValue handle_decl(RST_t*, const struct AST*);
 struct InterpValue handle_asn(RST_t*, const struct AST*);
 struct InterpValue handle_loop(RST_t*, const struct AST*);
 struct InterpValue handle_arithmetic(RST_t*, const struct AST*);
+struct InterpValue handle_indexing(RST_t*, const struct AST*);
 
 void push_args_params(RST_t*, const struct AST *params,
         struct InterpValue *argv);
