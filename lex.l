@@ -62,6 +62,9 @@ static char *_process_str(char *raw)
 "/" { return '/'; }
 "%" { return '%'; }
 
+"<" { return '<'; }
+">" { return '>'; }
+
 "==" { return EQ; }
 "!=" { return NEQ; }
 "!" { return NOT; }

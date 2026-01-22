@@ -46,8 +46,10 @@ struct AST {
                            *func;
         };
 
-        // Reserved for arithmetic operations.
-        struct AST *lhs;
+        union {
+                struct AST *lhs,
+                           *params;
+        };
 
         // Linked list of args.
         struct AST *args;

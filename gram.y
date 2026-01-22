@@ -31,7 +31,7 @@ struct AST *parser_ast;
 %token <str> STR_LIT
 
 %type <node> stmt_list stmt expr block binary_operation primary
-%type <node> decl_body asn_body
+%type <node> decl_body asn_body params_opt id_list
 %type <node> call args_opt arg_list
 %type <node> if_body loop_body
 %type <node> pipeline
@@ -58,6 +58,14 @@ stmt_list: %empty { $$ = nullptr; }
                 }
          }
          ;
+
+id_list: ID { $$ = id($1); }
+       | id_list ID {
+                struct AST *newid = id($2);
+                append_arg(newid, $1);
+                $$ = $1;
+       }
+       ;
 
 stmt: LOOP '(' loop_body ')' { $$ = $3; }
     | expr { $$ = $1; }
@@ -101,8 +109,15 @@ binary_operation: expr '+' expr { $$ = binary(ART_Add, $1, $3); }
                 | expr NEQ expr { $$ = binary(ART_Neq, $1, $3); }
                 ;
 
-block: '{' stmt_list '}' { $$ = block($2); }
+block: params_opt '{' stmt_list '}' {
+        $$ = block($3);
+        $$->params = $1;
+     }
      ;
+
+params_opt: %empty { $$ = nullptr; }
+          | '<' id_list '>' { $$ = $2; }
+          ;
 
 if_body: expr expr expr {
                 $$ = branch($1, $2, $3);
