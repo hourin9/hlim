@@ -35,11 +35,13 @@ struct AST *parser_ast;
 %type <node> call args_opt arg_list
 %type <node> if_body loop_body
 %type <node> pipeline
+%type <node> list_index
 
 %left ARROW
 %left '+' '-'
 %left '*' '/' '%'
 %left EQ NEQ
+%left ':'
 %left '('
 %nonassoc NOT
 
@@ -99,7 +101,10 @@ expr: DECL '(' decl_body ')' { $$ = $3; }
     | IF '(' if_body ')' { $$ = $3; }
     | pipeline { $$ = $1; }
     | call { $$ = $1; }
+    | list_index
     ;
+
+list_index: expr ':' expr {}
 
 binary_operation: expr '+' expr { $$ = binary(ART_Add, $1, $3); }
                 | expr '-' expr { $$ = binary(ART_Sub, $1, $3); }
