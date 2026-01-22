@@ -26,22 +26,15 @@ struct InterpValue handle_call(RST_t *st, const struct AST *n)
         struct SSTWrapper *caller_scope = st->current;
         struct InterpValue final = { .type = VAL_Nil };
         struct InterpValue *args = evaluate_arg_list(st, n->args);
+        struct InterpValue func;
 
         // Anonymous function (calling a block)
         if (n->func->sval == nullptr) {
-                struct InterpValue anon = evaluate_one(st, n->body);
-
-                rst_closure(st, anon.scope);
-                push_args_params(st, anon.node->params, args);
-                final = evaluate_list(st, anon.node);
-                st->current = caller_scope;
-
-                arrfree(args);
-                return final;
+                func = evaluate_one(st, n->body);
         }
 
         // TODO: move this to separate builtin func handler
-        if (strcmp(n->func->sval, "print") == 0) {
+        else if (strcmp(n->func->sval, "print") == 0) {
                 for (size_t i=0; i<arrlen(args); i++)
                         print_value(args[i]);
 
@@ -49,14 +42,19 @@ struct InterpValue handle_call(RST_t *st, const struct AST *n)
                 return final;
         }
 
-        struct InterpValue func = rst_find(st, n->func->sval);
+        // Search symtable
+        else {
+                func = rst_find(st, n->func->sval);
+        }
 
-        if (func.type != VAL_Node)
+        if (func.node == nullptr || func.type != VAL_Node) {
+                arrfree(args);
                 return final;
+        }
 
         rst_closure(st, func.scope);
         push_args_params(st, func.node->params, args);
-        final = evaluate_list(st, func.node);
+        final = evaluate_list(st, func.node->body);
         st->current = caller_scope;
 
         arrfree(args);
@@ -72,11 +70,9 @@ struct InterpValue handle_decl(RST_t *st, const struct AST *n)
         if (val->type == AST_Block) {
                 v = (struct InterpValue){
                         .type = VAL_Node,
-                        .node = val->body,
+                        .node = val,
                         .scope = st->current,
                 };
-
-                v.node->params = val->params;
         } else {
                 v = evaluate_one(st, val);
         }
@@ -94,11 +90,9 @@ struct InterpValue handle_asn(RST_t *st, const struct AST *n)
         if (val->type == AST_Block) {
                 v = (struct InterpValue){
                         .type = VAL_Node,
-                        .node = val->body,
+                        .node = val,
                         .scope = st->current,
                 };
-
-                v.node->params = val->params;
         } else {
                 v = evaluate_one(st, val);
         }
