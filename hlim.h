@@ -46,13 +46,11 @@ struct AST {
                            *func;
         };
 
-        union {
-                struct AST *lhs,
-                           *params;
-        };
+        struct AST *lhs;
 
         // Linked list of args.
         struct AST *args;
+        struct AST *params;
 
         struct AST *next;
 };
