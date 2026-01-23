@@ -38,12 +38,12 @@ struct AST *parser_ast;
 %type <node> list_index
 
 %left ARROW
+%nonassoc NOT
+%left EQ NEQ
 %left '+' '-'
 %left '*' '/' '%'
-%left EQ NEQ
-%left ':'
 %left '('
-%nonassoc NOT
+%left ':'
 
 %start input
 %%
