@@ -70,7 +70,7 @@ id_list: ID { $$ = id($1); }
        ;
 
 stmt: LOOP '(' loop_body ')' { $$ = $3; }
-    | expr { $$ = $1; }
+    | expr
     ;
 
 decl_body: ID expr {
@@ -90,20 +90,20 @@ asn_body: ID expr {
 primary: NUM_LIT { $$ = number($1); }
        | STR_LIT { $$ = string($1); }
        | ID { $$ = id($1); }
-       | block { $$ = $1; }
+       | block
        | '[' expr ']' { $$ = $2; }
        ;
 
 expr: DECL '(' decl_body ')' { $$ = $3; }
     | ASN '(' asn_body ')' { $$ = $3; }
-    | binary_operation { $$ = $1; }
+    | binary_operation
     | NOT expr { $$ = binary(ART_Not, $2, nullptr); }
     | IF '(' if_body ')' { $$ = $3; }
-    | pipeline { $$ = $1; }
-    | call { $$ = $1; }
+    | pipeline
+    | call
     ;
 
-list_index: primary { $$ = $1; }
+list_index: primary
           | list_index ':' primary { $$ = binary(ART_Index, $1, $3); }
           ;
 
@@ -139,19 +139,19 @@ loop_body: expr expr {
          }
          ;
 
-call: list_index { $$ = $1; }
+call: list_index
     | call '(' args_opt ')' { $$ = call($1, $3); }
     ;
 
 args_opt: %empty { $$ = nullptr; }
-        | arg_list { $$ = $1; }
+        | arg_list
         ;
 
 arg_list: arg_list expr {
                 append_arg($2, $1);
                 $$ = $1;
         }
-        | expr { $$ = $1; }
+        | expr
         ;
 
 pipeline: expr ARROW call {
