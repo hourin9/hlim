@@ -101,10 +101,10 @@ expr: DECL '(' decl_body ')' { $$ = $3; }
     | IF '(' if_body ')' { $$ = $3; }
     | pipeline { $$ = $1; }
     | call { $$ = $1; }
-    | list_index
     ;
 
-list_index: expr ':' expr { $$ = binary(ART_Index, $1, $3); }
+list_index: primary { $$ = $1; }
+          | list_index ':' primary { $$ = binary(ART_Index, $1, $3); }
           ;
 
 binary_operation: expr '+' expr { $$ = binary(ART_Add, $1, $3); }
@@ -139,7 +139,7 @@ loop_body: expr expr {
          }
          ;
 
-call: primary { $$ = $1; }
+call: list_index { $$ = $1; }
     | call '(' args_opt ')' { $$ = call($1, $3); }
     ;
 
