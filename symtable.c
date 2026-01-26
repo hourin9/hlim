@@ -16,6 +16,8 @@ RST_t init_runtime_symtable()
 
 void rst_new_scope(RST_t *rst)
 {
+        if (rst == nullptr)
+                return;
         struct SSTWrapper *scope = malloc(sizeof(*scope));
         struct InterpValue nil = { .type = VAL_Nil };
         scope->table = nullptr;
@@ -26,6 +28,8 @@ void rst_new_scope(RST_t *rst)
 
 void rst_pop_scope(RST_t *rst)
 {
+        if (rst == nullptr)
+                return;
         if (rst->current->parent == nullptr)
                 return;
         struct SSTWrapper *old = rst->current;
@@ -34,6 +38,8 @@ void rst_pop_scope(RST_t *rst)
 
 void rst_closure(RST_t *rst, struct SSTWrapper *capture)
 {
+        if (rst == nullptr)
+                return;
         struct SSTWrapper *scope = malloc(sizeof(*scope));
         scope->table = nullptr;
 
@@ -43,6 +49,8 @@ void rst_closure(RST_t *rst, struct SSTWrapper *capture)
 
 SST_t *global_rt_scope(RST_t *rst)
 {
+        if (rst == nullptr)
+                return nullptr;
         struct SSTWrapper *cur = rst->current;
         while (cur->parent != nullptr)
                 cur = cur->parent;
@@ -51,16 +59,22 @@ SST_t *global_rt_scope(RST_t *rst)
 
 SST_t *current_rt_scope(RST_t *rst)
 {
+        if (rst == nullptr)
+                return nullptr;
         return rst->current->table;
 }
 
 void rst_declare(RST_t *rst, char *id, struct InterpValue val)
 {
+        if (rst == nullptr)
+                return;
         shput(rst->current->table, id, val);
 }
 
 void rst_assign(RST_t *rst, char *id, struct InterpValue val)
 {
+        if (rst == nullptr)
+                return;
         struct SSTWrapper *cur = rst->current;
 
         while (cur != NULL) {
@@ -77,6 +91,8 @@ void rst_assign(RST_t *rst, char *id, struct InterpValue val)
 
 struct InterpValue rst_find(RST_t *rst, char *id)
 {
+        if (rst == nullptr)
+                return (struct InterpValue){ .type = VAL_Nil };
         struct SSTWrapper *cur = rst->current;
         while (cur != nullptr) {
                 int index = shgeti(cur->table, id);

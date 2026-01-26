@@ -4,7 +4,6 @@
 
 struct InterpValue constant_fold(const struct AST *node)
 {
-        printf("%d\n", node->type);
         if (node == nullptr)
                 return (struct InterpValue){ .type = VAL_Nil };
 
@@ -26,8 +25,7 @@ struct InterpValue constant_fold(const struct AST *node)
                    *rhs = number(vrhs.f32);
 
         struct AST *tmp = binary(node->arit, lhs, rhs);
-        struct RuntimeSymTable sym = init_runtime_symtable();
-        struct InterpValue v = handle_arithmetic(&sym, tmp);
+        struct InterpValue v = handle_arithmetic(nullptr, tmp);
         free(tmp);
         return v;
 }
