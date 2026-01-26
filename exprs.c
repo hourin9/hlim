@@ -42,6 +42,22 @@ struct InterpValue handle_call(RST_t *st, const struct AST *n)
                 return final;
         }
 
+        else if (strcmp(n->func->sval, "assert") == 0) {
+                struct InterpValue res = args[0];
+
+                // Assertion succeeded
+                if (to_bool(res))
+                        return final;
+
+                // Assertion failed
+                for (size_t i=1; i<arrlen(args); i++)
+                        print_value(args[i]);
+
+                // TODO: use a Result struct or something to handle returns
+                // and exits instead of directly calling exit() from func.
+                exit(-1);
+        }
+
         // Search symtable
         else {
                 func = rst_find(st, n->func->sval);
