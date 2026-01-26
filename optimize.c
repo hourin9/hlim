@@ -22,7 +22,11 @@ struct AST *optimize(struct AST *n)
 
         struct InterpValue db_elim = eliminate_dead_branches(n);
         if (db_elim.type == VAL_Node)
-                return db_elim.node;
+                // In case it eliminates a loop, current node is
+                // replaced with the next node. Thus shortening the AST
+                // and making the `if (n->next)` wrong.
+                // We try to optimize the node it returns in that case.
+                return optimize(db_elim.node);
 
         if (n->next)
                 n->next = optimize(n->next);
