@@ -25,6 +25,7 @@ struct AST *parser_ast;
 %token LOOP
 %token NEQ
 %token NOT
+%token OPTIMIZE
 
 %token <f32> NUM_LIT
 %token <str> ID
@@ -96,6 +97,7 @@ primary: NUM_LIT { $$ = number($1); }
 
 expr: DECL '(' decl_body ')' { $$ = $3; }
     | ASN '(' asn_body ')' { $$ = $3; }
+    | OPTIMIZE '(' stmt ')' { $$ = optimize($stmt); }
     | binary_operation
     | NOT expr { $$ = binary(ART_Not, $2, nullptr); }
     | IF '(' if_body ')' { $$ = $3; }

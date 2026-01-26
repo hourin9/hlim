@@ -163,5 +163,5 @@ __attribute__((deprecated))
 struct InterpValue evaluate_block(RST_t*, const struct AST *root);
 
 struct InterpValue constant_fold(const struct AST*);
-struct AST *optimize(const struct AST*);
+struct AST *optimize(struct AST*);
 

@@ -45,6 +45,7 @@ static char *_process_str(char *raw)
 "decl" { return DECL; }
 "if" { return IF; }
 "loop" { return LOOP; }
+"optimize" { return OPTIMIZE; }
 
 "->" { return ARROW; }
 
