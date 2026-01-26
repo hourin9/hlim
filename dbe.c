@@ -36,7 +36,9 @@ struct InterpValue eliminate_dead_branches(struct AST *n)
                         struct AST *next = n->next;
                         return (struct InterpValue){
                                 .type = VAL_Node,
-                                .node = dup(next)
+                                .node = (next != nullptr)
+                                        ? dup(next)
+                                        : nullptr,
                         };
                 }
 
