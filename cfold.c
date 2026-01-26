@@ -16,15 +16,16 @@ struct InterpValue constant_fold(const struct AST *node)
         if (node->type != AST_Arit)
                 return (struct InterpValue){ .type = VAL_Nil };
 
-        struct InterpValue vlhs = constant_fold(node->lhs),
-                           vrhs = constant_fold(node->rhs);
-        if (vlhs.type == VAL_Nil && vrhs.type == VAL_Nil)
+        struct InterpValue lhs = constant_fold(node->lhs),
+                           rhs = constant_fold(node->rhs);
+        if (lhs.type == VAL_Nil || rhs.type == VAL_Nil)
                 return (struct InterpValue){ .type = VAL_Nil };
 
-        struct AST *lhs = number(vlhs.f32),
-                   *rhs = number(vrhs.f32);
-
-        struct AST *tmp = binary(node->arit, lhs, rhs);
+        struct AST *tmp = binary(
+                node->arit,
+                number(lhs.type),
+                number(lhs.type)
+        );
         struct InterpValue v = handle_arithmetic(nullptr, tmp);
         free(tmp);
         return v;
