@@ -39,8 +39,7 @@ struct InterpValue evaluate_one(RST_t *st, const struct AST *n)
 
         case AST_Block:
                 // So that node doesn't have to be un-const'ed
-                struct AST *block = malloc(sizeof(*block));
-                memcpy(block, n, sizeof(*block));
+                struct AST *block = dup(n);
                 return (struct InterpValue){
                         .type = VAL_Node,
                         .node = block,
