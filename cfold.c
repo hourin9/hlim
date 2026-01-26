@@ -23,8 +23,8 @@ struct InterpValue constant_fold(const struct AST *node)
 
         struct AST *tmp = binary(
                 node->arit,
-                number(lhs.type),
-                number(lhs.type)
+                number(lhs.f32),
+                number(rhs.f32)
         );
         struct InterpValue v = handle_arithmetic(nullptr, tmp);
         free(tmp);
