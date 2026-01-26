@@ -81,6 +81,7 @@ struct AST *branch(struct AST *cond, struct AST *then,
         struct AST *otherwise);
 struct AST *loop(struct AST *cond, struct AST *body);
 struct AST *call(struct AST *func, struct AST *argv);
+struct AST *dup(const struct AST*);
 
 enum ValueType {
         VAL_Nil,
@@ -160,4 +161,7 @@ void push_args_simple(RST_t*, struct InterpValue *argv);
 // expressions. I prefer predictability.
 __attribute__((deprecated))
 struct InterpValue evaluate_block(RST_t*, const struct AST *root);
+
+struct InterpValue constant_fold(const struct AST*);
+struct AST *optimize(const struct AST*);
 

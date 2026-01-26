@@ -1,6 +1,7 @@
 #include "hlim.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 struct AST *find_end(struct AST *node)
 {
@@ -110,5 +111,12 @@ struct AST *call(struct AST *func, struct AST *args)
         struct AST *call = node(AST_Call, args);
         call->func = func;
         return call;
+}
+
+struct AST *dup(const struct AST *t)
+{
+        struct AST *n = malloc(sizeof(*n));
+        memcpy(n, t, sizeof(*n));
+        return n;
 }
 

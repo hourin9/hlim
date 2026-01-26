@@ -42,6 +42,12 @@ struct InterpValue handle_call(RST_t *st, const struct AST *n)
                 return final;
         }
 
+        else if (strcmp(n->func->sval, "optimize") == 0) {
+                final = constant_fold(args[0].node->body);
+                arrfree(args);
+                return final;
+        }
+
         // Search symtable
         else {
                 func = rst_find(st, n->func->sval);
