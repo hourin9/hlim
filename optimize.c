@@ -16,6 +16,10 @@ struct AST *optimize(struct AST *n)
                         return number(res.f32);
         }
 
+        if (n->type == AST_Block) {
+                n->body = optimize(n->body);
+        }
+
         struct InterpValue db_elim = eliminate_dead_branches(n);
         if (db_elim.type == VAL_Node)
                 return db_elim.node;
