@@ -5,6 +5,10 @@ struct AST *optimize(struct AST *n)
         if (n == nullptr)
                 return nullptr;
 
+        if (!has_side_effect(n)) {
+                return optimize(n->next);
+        }
+
         if (n->type == AST_Arit || n->type == AST_Asn) {
                 n->lhs = optimize(n->lhs);
                 n->rhs = optimize(n->rhs);

@@ -164,5 +164,6 @@ struct InterpValue evaluate_block(RST_t*, const struct AST *root);
 
 struct InterpValue constant_fold(const struct AST*);
 struct InterpValue eliminate_dead_branches(struct AST*);
+bool has_side_effect(const struct AST*);
 struct AST *optimize(struct AST*);
 
