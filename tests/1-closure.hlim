@@ -1,0 +1,31 @@
+decl(x 7)
+
+assert(x == 7 "var. declaration failed")
+
+{
+    decl(x 10)
+    assert(x == 10 "var. shadowing failed")
+}()
+
+assert(x == 7 "local scope leaked")
+
+decl(fn<f> { decl(x 5) f() })
+fn({ assert(x 7 "lexical scoping failed") })
+
+decl(make_adder<x> { <n>{x + n} })
+
+decl(add5 make_adder(5))
+decl(add10 make_adder(10))
+
+assert(add5(7) == 12 "closure failed to capture x=5")
+assert(add10(7) == 17 "closure failed to capture x=10")
+
+decl(persist {
+    decl(count 0)
+    { asn(count count+1) count }
+})
+
+decl(c persist())
+assert(c() == 1)
+assert(c() == 2 "closure state not persisting")
+
