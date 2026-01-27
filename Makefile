@@ -40,6 +40,13 @@ clean-deps:
 clean-objs:
 	rm -f *.o
 
+TEST_FILES := $(wildcard tests/*)
+test:
+	@for file in $(TEST_FILES); do \
+		echo "$$file"; \
+		./hlim < ./$$file || { echo "$$file failed"; exit 1; }; \
+	done
+
 -include $(OBJ_FILES:.o=.d)
 
 .PHONY: clean all

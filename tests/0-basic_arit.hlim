@@ -1,0 +1,9 @@
+decl(target 11)
+assert([7+4] == target "basic addition failed")
+assert([22/2] == target "basic div. failed")
+assert([20-4+2-1-6] == target "left assoc. failed")
+assert([10/2/1] == 5 "div. assoc. failed")
+assert([3+4*2] == target "operator prec. failed")
+assert([[3+4]*2] == 14 "expr. grouping failed")
+assert([2*[3+[8/4 ]]] == 10 "deep nesting failed")
+
