@@ -1,0 +1,7 @@
+decl(count 0)
+decl(i 10)
+loop(i { asn(count count+i) asn(i i-2) }())
+assert(count==30 "downwards iter. failed")
+
+loop(0 assert(0 "zero-trip loop failed"))
+
