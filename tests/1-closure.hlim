@@ -10,7 +10,7 @@ assert(x == 7 "var. declaration failed")
 assert(x == 7 "local scope leaked")
 
 decl(fn<f> { decl(x 5) f() })
-fn({ assert(x 7 "lexical scoping failed") })
+fn({ assert(x == 7 "lexical scoping failed") })
 
 decl(make_adder<x> { <n>{x + n} })
 
