@@ -82,6 +82,10 @@ void print_value(struct InterpValue v)
         case VAL_Node:
                 recursive_print(stdout, v.node, 0);
                 break;
+
+        case VAL_FFILibHandle:
+                printf("(ffi handler)");
+                break;
         }
 
         fflush(stdout);
@@ -92,6 +96,9 @@ bool to_bool(struct InterpValue v)
         switch (v.type) {
         case VAL_Num:
                 return v.f32 != 0;
+
+        case VAL_FFILibHandle:
+                return v.handle != nullptr;
 
         default:
                 return false;

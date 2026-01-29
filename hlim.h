@@ -90,6 +90,8 @@ enum ValueType {
         VAL_String,
         VAL_Id,
         VAL_Node,
+
+        VAL_FFILibHandle,
 };
 
 struct SSTWrapper;
@@ -99,6 +101,8 @@ struct InterpValue {
                 float f32;
                 char *str;
                 struct AST *node;
+
+                void *handle;
         };
 
         struct SSTWrapper *scope;
