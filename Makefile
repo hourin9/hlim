@@ -9,7 +9,7 @@ override CFLAGS += $(INTERNAL_CFLAGS)
 SRC_FILES := $(wildcard *.c)
 OBJ_FILES := $(SRC_FILES:.c=.o)
 
-LIBS := -lm
+LIBS := -lm -lffi
 
 all: hlim
 

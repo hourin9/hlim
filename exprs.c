@@ -69,6 +69,12 @@ struct InterpValue handle_call(RST_t *st, const struct AST *n)
                 return final;
         }
 
+        if (func.type == VAL_FFISym) {
+                final = handle_ffi_call(args, func);
+                arrfree(args);
+                return final;
+        }
+
         if (func.node == nullptr || func.type != VAL_Node) {
                 arrfree(args);
                 return final;
