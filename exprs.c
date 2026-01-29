@@ -63,6 +63,12 @@ struct InterpValue handle_call(RST_t *st, const struct AST *n)
                 func = rst_find(st, n->func->sval);
         }
 
+        if (func.type == VAL_FFILibHandle) {
+                final = handle_ffi_load(args[0], func.ptr);
+                arrfree(args);
+                return final;
+        }
+
         if (func.node == nullptr || func.type != VAL_Node) {
                 arrfree(args);
                 return final;

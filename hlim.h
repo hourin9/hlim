@@ -163,7 +163,7 @@ struct InterpValue handle_arithmetic(RST_t*, const struct AST*);
 struct InterpValue handle_indexing(RST_t*, const struct AST*);
 struct InterpValue handle_import(RST_t*, const struct AST*);
 struct InterpValue handle_ffi_load(
-        const struct InterpValue *args,
+        struct InterpValue arg,
         void *handle);
 
 void push_args_params(RST_t*, const struct AST *params,
