@@ -92,6 +92,11 @@ static char *_process_str(char *raw)
         return ID;
 }
 
+"0x"[a-zA-Z0-9]+ {
+        yylval.f32 = (int)strtol(yytext, NULL, 16);
+        return NUM_LIT;
+}
+
 "//"[^\n]* { ; }
 
 "/*"([^*]|\*+[^*/])*(\*+)"/" { ; }
