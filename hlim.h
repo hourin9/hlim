@@ -136,6 +136,7 @@ struct InterpValue rst_find(RST_t*, char *id);
 void print_value(struct InterpValue);
 float to_num(struct InterpValue);
 bool to_bool(struct InterpValue);
+const char *to_str(struct InterpValue);
 
 struct InterpValue evaluate_list(RST_t*, const struct AST *root);
 struct InterpValue evaluate_one(RST_t*, const struct AST*);
@@ -148,6 +149,7 @@ struct InterpValue handle_asn(RST_t*, const struct AST*);
 struct InterpValue handle_loop(RST_t*, const struct AST*);
 struct InterpValue handle_arithmetic(RST_t*, const struct AST*);
 struct InterpValue handle_indexing(RST_t*, const struct AST*);
+struct InterpValue handle_import(RST_t*, const struct AST*);
 
 void push_args_params(RST_t*, const struct AST *params,
         struct InterpValue *argv);

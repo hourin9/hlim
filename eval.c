@@ -11,6 +11,9 @@ struct InterpValue evaluate_one(RST_t *st, const struct AST *n)
         case AST_Call:
                 return handle_call(st, n);
 
+        case AST_Import:
+                return handle_import(st, n);
+
         case AST_Arit:
                 if (n->arit == ART_Index)
                         return handle_indexing(st, n);
@@ -100,6 +103,13 @@ float to_num(struct InterpValue v)
         if (v.type == VAL_Num)
                 return v.f32;
         return -1;
+}
+
+const char *to_str(struct InterpValue v)
+{
+        if (v.type == VAL_String)
+                return v.str;
+        return nullptr;
 }
 
 struct InterpValue evaluate_block(RST_t *rst, const struct AST *root)
