@@ -46,11 +46,30 @@ struct InterpValue handle_ffi_load(
         };
 }
 
+static ffi_type *_push_number(uint64_t *data, float n, char sig)
+{
+        switch (sig) {
+        case 'i':
+                *(int32_t*)data = (int32_t)n;
+                return &ffi_type_sint32;
+
+        case 'f':
+                *(float*)data = n;
+                return &ffi_type_float;
+
+        default:
+                *(int64_t*)data = (int64_t)n;
+                return &ffi_type_sint64;
+        }
+}
+
 struct InterpValue handle_ffi_call(
         struct InterpValue *args,
         struct InterpValue call_handle)
 {
         size_t argc = arrlen(args);
+        size_t sigc = strlen(call_handle.sym.sig);
+        (void)sigc;
         ffi_cif cif;
 
         ffi_type *ffi_args[argc];
@@ -62,16 +81,17 @@ struct InterpValue handle_ffi_call(
         // TODO: find out why.
         uint64_t data_buf[argc];
 
-        for (size_t i=0; i<argc; i++) {
+        size_t i=0;
+        for (i=0; i<argc; i++) {
                 struct InterpValue *arg = &args[i];
 
                 switch (arg->type) {
                 case VAL_Num:
-                        // FIXME: currently hard converted into int32_t because
-                        // some raylib function requires int. I should add the Int
-                        // data type along with float.
-                        *(int32_t*)&data_buf[i] = (int32_t)arg->f32;
-                        ffi_args[i] = &ffi_type_sint32;
+                        ffi_args[i] = _push_number(
+                                &data_buf[i],
+                                arg->f32,
+                                call_handle.sym.sig[i]
+                        );
                         values[i] = &data_buf[i];
                         break;
 
