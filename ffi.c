@@ -108,7 +108,7 @@ struct InterpValue handle_ffi_call(
                 }
         }
 
-        ffi_type *return_type;
+        ffi_type *return_type = &ffi_type_void;
         switch (sym.sig[0]) {
         case 'v':
                 return_type = &ffi_type_void;
