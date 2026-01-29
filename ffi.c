@@ -33,13 +33,23 @@ struct InterpValue handle_ffi_call(
         ffi_type *ffi_args[argc];
         void *values[argc];
 
+        // AI told me use to use a storage buffer for
+        // arg values. I was skeptical, but it just won't
+        // work without this storage buffer.
+        // TODO: find out why.
+        uint64_t data_buf[argc];
+
         for (size_t i=0; i<argc; i++) {
                 struct InterpValue *arg = &args[i];
 
                 switch (arg->type) {
                 case VAL_Num:
-                        ffi_args[i] = &ffi_type_float;
-                        values[i] = &arg->f32;
+                        // FIXME: currently hard converted into int32_t because
+                        // some raylib function requires int. I should add the Int
+                        // data type along with float.
+                        *(int32_t*)&data_buf[i] = (int32_t)arg->f32;
+                        ffi_args[i] = &ffi_type_sint32;
+                        values[i] = &data_buf[i];
                         break;
 
                 case VAL_Nil:
@@ -48,8 +58,10 @@ struct InterpValue handle_ffi_call(
                         break;
 
                 case VAL_String:
+                        data_buf[i] = (uintptr_t)arg->str;
                         ffi_args[i] = &ffi_type_pointer;
-                        values[i] = &arg->str;
+                        values[i] = &data_buf[i];
+                        break;
 
                 default:
                         ffi_args[i] = &ffi_type_pointer;
@@ -58,18 +70,19 @@ struct InterpValue handle_ffi_call(
                 }
         }
 
+        // TODO: currently hard coded to signed 32bit int so
+        // that raylib's WindowShouldClose() can work.
         ffi_status status = ffi_prep_cif(
                 &cif,
                 FFI_DEFAULT_ABI,
                 argc,
-                &ffi_type_float,
+                &ffi_type_sint32,
                 ffi_args
         );
 
         if (status == FFI_OK) {
-                float rc;
+                int rc = 0.f;
                 ffi_call(&cif, FFI_FN(call_handle.ptr), &rc, values);
-
                 return (struct InterpValue){
                         .type = VAL_Num,
                         .f32 = rc
