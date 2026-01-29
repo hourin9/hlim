@@ -1,5 +1,7 @@
 #include "hlim.h"
 
+#include "external/stb_ds.h"
+
 #include <dlfcn.h>
 #include <ffi.h>
 
@@ -22,29 +24,50 @@ struct InterpValue handle_ffi_load(
 }
 
 struct InterpValue handle_ffi_call(
-        const struct InterpValue *args,
+        struct InterpValue *args,
         struct InterpValue call_handle)
 {
+        size_t argc = arrlen(args);
         ffi_cif cif;
-        ffi_type *ffi_args[1];
-        void *values[1];
 
-        float arg_val = args->f32;
-        float rc;
+        ffi_type *ffi_args[argc];
+        void *values[argc];
 
-        ffi_args[0] = &ffi_type_float;
-        values[0] = &arg_val;
+        for (size_t i=0; i<argc; i++) {
+                struct InterpValue *arg = &args[i];
 
+                switch (arg->type) {
+                case VAL_Num:
+                        ffi_args[i] = &ffi_type_float;
+                        values[i] = &arg->f32;
+                        break;
+
+                case VAL_Nil:
+                        ffi_args[i] = &ffi_type_pointer;
+                        values[i] = nullptr;
+                        break;
+
+                case VAL_String:
+                        ffi_args[i] = &ffi_type_pointer;
+                        values[i] = &arg->str;
+
+                default:
+                        ffi_args[i] = &ffi_type_pointer;
+                        values[i] = &arg->ptr;
+                        break;
+                }
+        }
 
         ffi_status status = ffi_prep_cif(
                 &cif,
                 FFI_DEFAULT_ABI,
-                1,
+                argc,
                 &ffi_type_float,
                 ffi_args
         );
 
         if (status == FFI_OK) {
+                float rc;
                 ffi_call(&cif, FFI_FN(call_handle.ptr), &rc, values);
 
                 return (struct InterpValue){
