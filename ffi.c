@@ -5,21 +5,44 @@
 #include <dlfcn.h>
 #include <ffi.h>
 
+int validate_signature(const char *sig)
+{
+        size_t n = strlen(sig);
+
+        for (size_t i=0; i<n; i++) {
+                bool cond = (sig[i] == 'v')
+                        || (sig[i] == 'i')
+                        || (sig[i] == 'f')
+                        || (sig[i] == 's')
+                        ;
+
+                if (!cond)
+                        return -1;
+        }
+
+        return 0;
+}
+
 struct InterpValue handle_ffi_load(
-        struct InterpValue arg,
+        const struct InterpValue *args,
         void *handle)
 {
-        if (arg.type != VAL_String)
+        if (args[0].type != VAL_String)
                 return (struct InterpValue){ .type = VAL_Nil };
 
-        void *ptr = dlsym(handle, arg.str);
+        void *ptr = dlsym(handle, args[0].str);
 
         if (!ptr)
                 return (struct InterpValue){ .type = VAL_Nil };
 
+        char *sig = (arrlen(args) > 1)
+                ? strdup(to_str(args[1]))
+                : strdup("i")
+                ;
+
         return (struct InterpValue){
                 .type = VAL_FFISym,
-                .ptr = ptr
+                .sym = { ptr, sig }
         };
 }
 

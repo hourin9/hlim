@@ -64,7 +64,7 @@ struct InterpValue handle_call(RST_t *st, const struct AST *n)
         }
 
         if (func.type == VAL_FFILibHandle) {
-                final = handle_ffi_load(args[0], func.ptr);
+                final = handle_ffi_load(args, func.ptr);
                 arrfree(args);
                 return final;
         }

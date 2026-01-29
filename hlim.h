@@ -95,6 +95,17 @@ enum ValueType {
         VAL_FFISym,
 };
 
+struct FFISym {
+        void *ptr;
+
+        // Function signature to call FFI funcs.
+        // handle_ffi_call() will switch on the chars in this
+        // string to cast properly.
+        char *sig;
+};
+
+int validate_signature(const char*);
+
 struct SSTWrapper;
 struct InterpValue {
         enum ValueType type;
@@ -104,6 +115,7 @@ struct InterpValue {
                 struct AST *node;
 
                 void *ptr;
+                struct FFISym sym;
         };
 
         struct SSTWrapper *scope;
@@ -156,7 +168,7 @@ struct InterpValue handle_arithmetic(RST_t*, const struct AST*);
 struct InterpValue handle_indexing(RST_t*, const struct AST*);
 struct InterpValue handle_import(RST_t*, const struct AST*);
 struct InterpValue handle_ffi_load(
-        struct InterpValue arg,
+        const struct InterpValue *arg,
         void *handle);
 struct InterpValue handle_ffi_call(
         struct InterpValue *args,
