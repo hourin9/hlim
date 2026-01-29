@@ -22,6 +22,7 @@ struct AST *parser_ast;
 %token DECL
 %token EQ
 %token IF
+%token IMPORT
 %token LOOP
 %token NEQ
 %token NOT
@@ -98,6 +99,7 @@ primary: NUM_LIT { $$ = number($1); }
 expr: DECL '(' decl_body ')' { $$ = $3; }
     | ASN '(' asn_body ')' { $$ = $3; }
     | OPTIMIZE '(' stmt ')' { $$ = optimize($stmt); }
+    | IMPORT '(' STR_LIT ')' { $$ = node(AST_Import, string($3)); }
     | binary_operation
     | NOT expr { $$ = binary(ART_Not, $2, nullptr); }
     | IF '(' if_body ')' { $$ = $3; }

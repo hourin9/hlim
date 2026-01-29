@@ -16,6 +16,7 @@ enum ASTType {
         AST_Branch,
         AST_Loop,
         AST_Arit,
+        AST_Import,
 };
 
 enum ArtType {
