@@ -10,13 +10,7 @@ int validate_signature(const char *sig)
         size_t n = strlen(sig);
 
         for (size_t i=0; i<n; i++) {
-                bool cond = (sig[i] == 'v')
-                        || (sig[i] == 'i')
-                        || (sig[i] == 'f')
-                        || (sig[i] == 's')
-                        ;
-
-                if (!cond)
+                if (strchr("vifs", sig[i]) == nullptr)
                         return -1;
         }
 
@@ -68,7 +62,8 @@ struct InterpValue handle_ffi_call(
         struct InterpValue call_handle)
 {
         size_t argc = arrlen(args);
-        size_t sigc = strlen(call_handle.sym.sig);
+        struct FFISym sym = call_handle.sym;
+        size_t sigc = strlen(sym.sig);
         (void)sigc;
         ffi_cif cif;
 
@@ -90,7 +85,7 @@ struct InterpValue handle_ffi_call(
                         ffi_args[i] = _push_number(
                                 &data_buf[i],
                                 arg->f32,
-                                call_handle.sym.sig[i]
+                                (i+1 < sigc) ? sym.sig[i+1] : 'i'
                         );
                         values[i] = &data_buf[i];
                         break;
@@ -113,25 +108,44 @@ struct InterpValue handle_ffi_call(
                 }
         }
 
-        // TODO: currently hard coded to signed 32bit int so
-        // that raylib's WindowShouldClose() can work.
+        ffi_type *return_type;
+        switch (sym.sig[0]) {
+        case 'v':
+                return_type = &ffi_type_void;
+                break;
+        case 'f':
+                return_type = &ffi_type_float;
+                break;
+        case 'i':
+                return_type = &ffi_type_sint32;
+                break;
+        case 's':
+                return_type = &ffi_type_pointer;
+                break;
+        }
+
         ffi_status status = ffi_prep_cif(
                 &cif,
                 FFI_DEFAULT_ABI,
                 argc,
-                &ffi_type_sint32,
+                return_type,
                 ffi_args
         );
 
-        if (status == FFI_OK) {
-                int rc = 0.f;
-                ffi_call(&cif, FFI_FN(call_handle.ptr), &rc, values);
-                return (struct InterpValue){
-                        .type = VAL_Num,
-                        .f32 = rc
-                };
+        if (status != FFI_OK)
+                return (struct InterpValue){ .type = VAL_Nil };
+
+        if (return_type == &ffi_type_void) {
+                ffi_call(&cif, FFI_FN(call_handle.ptr), nullptr, values);
+                return (struct InterpValue){ .type = VAL_Nil };
         }
 
-        return (struct InterpValue){ .type = VAL_Nil };
+        ffi_arg result;
+        ffi_call(&cif, FFI_FN(call_handle.ptr), &result, values);
+        return (struct InterpValue){
+                .type = VAL_Num,
+                // TODO: cast result to the correct type
+                .f32 = (int)result
+        };
 }
 
