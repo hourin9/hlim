@@ -10,7 +10,7 @@ struct InterpValue handle_import(RST_t *t, const struct AST *n)
 
         if (lib != nullptr) {
                 imported_syms = 0;
-                void *handle = dlopen(lib, RTLD_GLOBAL);
+                void *handle = dlopen(lib, RTLD_LAZY | RTLD_GLOBAL);
 
                 if (!handle)
                         imported_syms = -1;
