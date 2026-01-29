@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include <ffi.h>
+
 enum ASTType {
         AST_Invalid,
         AST_Asn,
@@ -92,6 +94,12 @@ enum ValueType {
         VAL_Node,
 
         VAL_FFILibHandle,
+        VAL_FFISym,
+};
+
+struct FFISym {
+        ffi_cif cif;
+        ffi_type **args;
 };
 
 struct SSTWrapper;
@@ -102,7 +110,7 @@ struct InterpValue {
                 char *str;
                 struct AST *node;
 
-                void *handle;
+                void *ptr;
         };
 
         struct SSTWrapper *scope;
@@ -154,6 +162,9 @@ struct InterpValue handle_loop(RST_t*, const struct AST*);
 struct InterpValue handle_arithmetic(RST_t*, const struct AST*);
 struct InterpValue handle_indexing(RST_t*, const struct AST*);
 struct InterpValue handle_import(RST_t*, const struct AST*);
+struct InterpValue handle_ffi_load(
+        const struct InterpValue *args,
+        void *handle);
 
 void push_args_params(RST_t*, const struct AST *params,
         struct InterpValue *argv);

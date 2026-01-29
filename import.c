@@ -12,7 +12,7 @@ struct InterpValue handle_import(RST_t *t, const struct AST *n)
                 if (handle)
                         return (struct InterpValue){
                                 .type = VAL_FFILibHandle,
-                                .handle = handle
+                                .ptr = handle
                         };
         }
 

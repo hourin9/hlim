@@ -84,7 +84,11 @@ void print_value(struct InterpValue v)
                 break;
 
         case VAL_FFILibHandle:
-                printf("(ffi handler)");
+                printf("handler(%p)", v.ptr);
+                break;
+
+        case VAL_FFISym:
+                printf("sym(%p)", v.ptr);
                 break;
         }
 
@@ -98,7 +102,9 @@ bool to_bool(struct InterpValue v)
                 return v.f32 != 0;
 
         case VAL_FFILibHandle:
-                return v.handle != nullptr;
+                __attribute__((fallthrough));
+        case VAL_FFISym:
+                return v.ptr != nullptr;
 
         default:
                 return false;
