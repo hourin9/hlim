@@ -34,6 +34,9 @@ lex.yy.c: lex.l
 clean: clean-deps clean-objs
 	rm -f hlim gram.tab.* lex.yy.c
 
+clean-docs:
+	rm -f *.pdf docs.aux docs.log
+
 clean-deps:
 	rm -f *.d
 
@@ -46,6 +49,10 @@ test:
 		echo "$$file"; \
 		./hlim < ./$$file || { echo "$$file failed"; exit 1; }; \
 	done
+
+HLIM-LANGUAGE-MANUAL.pdf: docs/docs.tex
+	pdflatex $<
+	mv docs.pdf $@
 
 -include $(OBJ_FILES:.o=.d)
 
