@@ -300,5 +300,54 @@ decl(repeat {
 The above function takes a number and a block, then repeat that block
 N times. However be careful not to get it something other than an integer.
 
+\section{decl and asn}
+HLIM provides 2 methods to change a variable's value at runtime:
+\texttt{decl()} and \texttt{asn()}. This section goes into the
+differences between the 2.
+
+\subsection{decl}
+\texttt{decl()}, as its name suggests, declares an identifier and binds
+a value to it.
+
+Subsequent uses of decl within the same scope will overwrite the value
+of the identifier, whereas if used in a scope, it will create a new
+local identifier, which temporarily shadows the identifier with the
+same name in the outer scope, and is removed when the scope exits.
+
+HLIM also uses lexical scoping as opposed to the older version that
+uses dynamic scoping, and is thus more predictable.
+
+\subsection{asn}
+\texttt{asn()}, like its name suggests, assigns a new value to the
+identifier.
+
+Because it doesn't create an identifier, when requested to assign
+new value to something that doesn't exist, it does nothing, and the
+non-existent identifier remains undefined (outputs NIL when printed).
+
+As opposed to decl, when used within a local scope, asn will modify
+the value of an identifier declared in outer scopes if it's not
+already declared in local scope. That's why we usually use asn to
+increment counters in a loop statement.
+
+\subsection{Comparison}
+The following code demonstrates how asn and decl interacts with
+closures/scopes/blocks:
+\begin{lstlisting}
+decl(x 10)
+{
+    decl(x 5)     // Shadowing: creates new local x
+    print(x "\n") // Prints 5
+    asn(x 6)      // Updates local x (6)
+    print(x "\n") // Prints 6
+}()
+print(x "\n")     // Prints 10 (outer x was never touched)
+
+{
+    asn(x 20)     // No local x: updates outer x
+}()
+print(x "\n")     // Prints 20
+\end{lstlisting}
+
 \end{document}
 
