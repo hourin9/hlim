@@ -251,5 +251,54 @@ decl(func if(x { print("hi world\n") } 5))
 however it might not be desired as applying call syntax on a number
 returns NIL (nothing, similar to void) instead of that number.
 
+\subsection{loop}
+A loop syntax is similar to that of branching. Here's the program
+to print the multiplication table of 4:
+\begin{lstlisting}
+decl(x 1)
+loop(x!=11 {
+    print(x "*" 4 "=" x*4 "\n")
+    asn(x x+1)
+}())
+\end{lstlisting}
+
+A loop will evaluate the condition first. If it's true, then the loop
+body (2nd expression) will be evaluated (non-call rules apply). Otherwise
+it moves to the next expression without evaluating the body. Usually you'd
+want the loop body to do something, while not accidentally making it an
+infinite loop, so get in the habit of adding a trailing call whenever
+you want a loop.
+
+Similar to \texttt{if}, in the older iteration, the loop body is also
+automatically executed. I'm debating whether to bring it back as the
+loop itself doesn't evaluate to anything.
+
+However, note that a loop is the only statement that's not an expression
+in the language. A loop will not have return value and expression results.
+Meaning, the following code will error from the parsing phase:
+\begin{lstlisting}
+decl(x 5)
+decl(z loop(x { x asn(x-1) }()))
+print(z)
+\end{lstlisting}
+consequentially, you cannot use it as arguments for function calls.
+
+There's no such things as \texttt{for(int i=0;i<10;i++)} in HLIM. A loop
+is a pure loop, and it loops until the condition is false. However by
+applying the concepts learnt earlier, one can extend the language with
+this feature by writing this function:
+\begin{lstlisting}
+decl(repeat {
+    decl(x r0)
+    loop(x {
+        r1()
+        asn(x x-1)
+    }())
+})
+\end{lstlisting}
+
+The above function takes a number and a block, then repeat that block
+N times. However be careful not to get it something other than an integer.
+
 \end{document}
 
