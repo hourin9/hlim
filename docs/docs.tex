@@ -351,10 +351,48 @@ print(x "\n")     // Prints 20
 
 \chapter{Advanced syntax and features}
 In this chapter, we cover some more advanced features such
-as things that make HLL a functional language, and how to
+as things that make HLIM a functional language, and how to
 call an FFI function.
 
-\section{Expression grouping and precedence}
+\section{Expression grouping, precedence, and order of evaluation}
+Because HLIM already uses parentheses for calls, it uses square brackets
+for group expressions unlike parentheses in other programming languages.
+By using \texttt{[]} for expression grouping, the parser can immediately
+distinguish sub-expression and a function call without introducing a
+special terminal to end a statement (the semicolon in C and Go, Python's
+statement terminal rules).
+
+\begin{lstlisting}
+decl(x 5+4*3)
+print(x "\n") // Prints 17
+
+decl(x [5+4]*3)
+print(x "\n") // Prints 27
+\end{lstlisting}
+
+In HLIM, all operations are left associative. There are no exceptions.
+
+Unlike in many languages where the order of evaluation is left
+unspecified and thus encourages unpredictability (C for example),
+HLIM guarantees that expressions are evaluated from left to right,
+including for binary expressions and call arguments. This is to
+improve predictability when function arguments contains side effect.
+
+\begin{lstlisting}
+decl(x 5)
+decl(double { r0*2 })
+decl(print_2_nums { print(r0 " " r1 "\n") })
+print_2_nums(asn(x x+1) double(x))
+\end{lstlisting}
+
+The above function predictably prints:
+\begin{lstlisting}
+6 12
+\end{lstlisting}
+
+Because the assignment is the leftmost expression, it's evaluated
+first, and x is updated with new value (6) before the double
+function is called.
 
 \section{Pipelines}
 
