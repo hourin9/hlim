@@ -1,4 +1,5 @@
 \documentclass{book}
+\usepackage{listings}
 
 \title{HLIM Language Manual}
 \date{\today}
@@ -32,12 +33,36 @@ function as an argument for other functions, and function to return
 another function in order to compose bigger functions, and make the
 functions more flexible. However, even though most of a higher\-order
 function/closure's functions are implemented including non\-local variables
-to some extents, capturing specific variables like in C\+\+ or Rust is not
+to some extents, capturing specific variables like in C++ or Rust is not
 yet implemented.
 
 \mainmatter
 \chapter{Tutorial Introduction}
 \section{Hello World}
+The only way to proper learn a language is by writing programs in it.
+In HLIM, the program to print "Hello World"
+
+\begin{lstlisting}
+print("Hello World\n")
+\end{lstlisting}
+
+HLIM is interpreted and therefore there's no need for compiling. However,
+due to the limitations of Flex (the lexer used for HLIM), the only way to
+run HLIM code is with Unix pipes:
+\begin{lstlisting}
+hlim < code.hlim
+\end{lstlisting}
+
+If your machine is working correctly, and it should, print the following
+\begin{lstlisting}
+Hello World
+\end{lstlisting}
+
+A HLIM program consists of only expressions and statements. An expression
+is code that may have a return value, while a statement is code that doesn't.
+HLIM executes code from top to bottom, one expression or statement at a time.
+Everything is done in one parse, meaning it's not possible to reference
+something declared after the executing statement.
 
 \end{document}
 
