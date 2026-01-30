@@ -397,7 +397,74 @@ function is called.
 \section{Pipelines}
 
 \section{Function parameters}
+When you call a function, the arguments are evaluated and then
+automatically declared in the function's scope. For unnamed
+parameters, the expressions are declared with the
+\texttt{r + a number} format: \texttt{r0}, \texttt{r1} for example.
+
+\begin{lstlisting}
+decl(add { r0 + r1 })
+print(add(4 5))
+\end{lstlisting}
+
+When calling \texttt{add(4 5)}, the argument expressions are
+evaluated, then the interpreter creates a local scope for function
+add. In the function's scope, bindings named \texttt{r0} and \texttt{r1}
+are created and bound to the values 4 and 5, respectively.
+
+In case you don't supply expressions when a function requires it,
+e.g. when you supply only 2 arguments to a function that wants 3,
+the third argument (r3) implicitly evaluates to NIL and thus
+undefined behavior occurs. On my computer, adding a number to NIL
+returns that number as NIL is evaluated to zero, on your computer
+it might be different. It's being debated whether arithmetic
+expressions with NIL should cascade the entire expression into NIL.
+
+When you supply more expressions than the function needs, the extra
+expressions are discarded and become unused.
+
 \subsection{Named parameters}
+Automatically named parameters, while simple and useful to some extent,
+can become hard to read as the values lose their meanings.
+
+HLIM solves this by adding optional named parameters.
+\begin{lstlisting}
+decl(add<a b> { a + b })
+print(add(4 5))
+\end{lstlisting}
+
+By using the angle brackets (\texttt{<>}), you can specify the name
+that the interpreter will use to bind expressions to. In the above
+example, in function's local scope, bindings named \texttt{a} and
+\texttt{b} are created and bound to 4 and 5, respectively, letting
+you use the identifiers \texttt{a} and \texttt{b} in the function body.
+
+However, note that the parameter list is bound to the Block and not
+the identifier. This is better illustrated in the following code:
+\begin{lstlisting}
+decl(derive<f> {
+    decl(h 0.0001)
+    <x> {
+        [f(x+h) - f(x)]/h
+    }
+})
+\end{lstlisting}
+
+When \texttt{derive(<x>{x*x})} is called:
+\begin{enumerate}
+    \item The local identifier \texttt{f} bound to the argument
+        block \texttt{\{x*x\}}.
+    \item 0.0001 is bound to local identifier \texttt{h}
+    \item A new Block with the parameter list \texttt{x} is returned.
+        This allows the Block body to reference the identifier
+        \texttt{x}.
+\end{enumerate}
+
+It's OK if you don't understand why or how passing and returning
+functions work yet, because it involves higher-order functions.
+Just take note that the \texttt{x} in the returned Block isn't
+related to the input Block's \texttt{x} at all, and you can safely
+change the input Block to use \texttt{y}, or unnamed parameters.
 
 \section{List indexing}
 
