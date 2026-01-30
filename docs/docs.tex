@@ -11,6 +11,29 @@
 
 \frontmatter
 \chapter{Introduction}
+The HLIM is an interpreted programming language designed with a focus on
+functional programming principles and syntactic minimalism. An environment
+where gotchas and bugs happen due to syntactic gotchas is provided by reducing
+the number of unique syntactic constructs.
+
+The language, and by extension its first interpreter, is dynamic and
+weakly typed. Types are bound to values at runtime rather than declared
+identifiers. This is one of the biggest differences between HLIM and
+conventional functional languages. This removes overhead for the interpreter
+and the interpreter developer.
+
+Branching via \texttt{if()} and looping via \texttt{loop()} is provided.
+Early loop exiting can be done by forcefully making the loop condition
+false. I reckon the inclusion of a dedicated exit statement would be great,
+but it might clutter the control flow.
+
+Having first\-class functions, HLIM allows the user to freely pass a
+function as an argument for other functions, and function to return
+another function in order to compose bigger functions, and make the
+functions more flexible. However, even though most of a higher\-order
+function/closure's functions are implemented including non\-local variables
+to some extents, capturing specific variables like in C\+\+ or Rust is not
+yet implemented.
 
 \mainmatter
 \chapter{Tutorial Introduction}
