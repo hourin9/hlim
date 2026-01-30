@@ -162,5 +162,43 @@ Output:
 10
 \end{lstlisting}
 
+You can see more of call and non-call in action here:
+\begin{lstlisting}
+decl(func { r0 + 10 * 2 })
+decl(x { print("this is x\n") func(3) + func(4) * 2 }() )
+print(x)
+\end{lstlisting}
+
+Output:
+\begin{lstlisting}
+this is x
+71
+\end{lstlisting}
+
+The execution order, expression by expression:
+\begin{enumerate}
+    \item A block is bound to identifier \texttt{func}.
+        It's non-call and thus not executed.
+    \item Identifier \texttt{x} is declared. To determine the
+        value of \texttt{x}, the interpreter evaluates the
+        expression on the right.
+    \item Due to the call syntax (trailing \texttt{()}), the block
+        is evaluated immediately (IIFE).
+        \begin{enumerate}
+            \item \texttt{print("this is x\textbackslash")} is run.
+            \item The math is calculated: \textit{func(3)=23},
+                \textit{func(4)=24}
+            \item The result (71) is returned and bound to \texttt{x}.
+        \end{enumerate}
+    \item Finally, \texttt{print(x)} is executed and 71 is put
+        on the terminal
+\end{enumerate}
+
+\section{Control flows}
+With Blocks and calls clearly explained, we can move on to control flows.
+
+\subsection{if-else}
+Here's a function to check if
+
 \end{document}
 
