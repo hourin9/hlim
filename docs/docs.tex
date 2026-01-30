@@ -84,7 +84,8 @@ numbers, strings, and blocks.
     \item[Numbers] All numeric values are treated as single-precision
         32-bit floats.
     \item[Strings] An immutable sequence of ASCII characters.
-    \item[Blocks] The most powerful type, but will be covered later.
+    \item[Blocks] The most powerful type, used to represent anything from
+        functions to lists and structures.
 \end{itemize}
 
 In contrary to conventional languages, HLIM does not provide the integer,
@@ -109,6 +110,57 @@ In the code at the start of the section, more usage of the built-in function
 as arguments. This includes all 3 basic data types, and some extra ones used
 by FFI features of the language. \texttt{print()} can also print a
 function's AST because it's a Block.
+
+\section{Call versus non-call}
+Before discussing control flows, it's essential to understand Blocks and
+deferred execution. Without mentioning this, you will never understand why
+your loops don't run.
+
+In HLIM, curly braces \texttt{\{\}} \textbf{do not} denote a simple scope
+or a statement list like in C. Instead they define a Block value.
+
+A Block is a collection of expressions whose execution is \textbf{deferred}.
+Because HLIM is a single-pass interpreter, expressions are linked via a
+\texttt{next} pointer. When the interpreter encounters a Block, it treats the
+entire sequence as a single value and skips over it without evaluating its
+contents.
+
+Consider the following code, where a programmer coming from C might expect
+it to print 5 and then 10:
+\begin{lstlisting}
+decl(x 10)
+{
+    decl(x 5)
+    print(x "\n")
+}
+print(x "\n")
+\end{lstlisting}
+
+When running the program, you will notice that it only prints 10 once.
+The middle section (the Block) is evaluated as a value (a Block) but
+never invoked (evaluated). Its internal expressions are not evaluated.
+I call this a non-call block. For predictability, in HLIM a Block is
+always a non-call block, even if it might look better to have its content
+be automatically evaluated in few cases.
+
+The correct solution is to call the Block. This is a technique called
+"IIFE" (Immediately Invoked Function Expression), commonly used to provide
+a statement list or a scope in languages supporting closures but lacking
+syntax for scope. You can use the call syntax \texttt{()} to call it:
+\begin{lstlisting}
+decl(x 10)
+{
+    decl(x 5)
+    print(x "\n")
+}() // Look here
+print(x "\n")
+\end{lstlisting}
+
+Output:
+\begin{lstlisting}
+5
+10
+\end{lstlisting}
 
 \end{document}
 
