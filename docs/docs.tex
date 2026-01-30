@@ -28,11 +28,11 @@ Early loop exiting can be done by forcefully making the loop condition
 false. I reckon the inclusion of a dedicated exit statement would be great,
 but it might clutter the control flow.
 
-Having first\-class functions, HLIM allows the user to freely pass a
+Having first-class functions, HLIM allows the user to freely pass a
 function as an argument for other functions, and function to return
 another function in order to compose bigger functions, and make the
-functions more flexible. However, even though most of a higher\-order
-function/closure's functions are implemented including non\-local variables
+functions more flexible. However, even though most of a higher-order
+function/closure's functions are implemented including non-local variables
 to some extents, capturing specific variables like in C++ or Rust is not
 yet implemented.
 
@@ -63,6 +63,52 @@ is code that may have a return value, while a statement is code that doesn't.
 HLIM executes code from top to bottom, one expression or statement at a time.
 Everything is done in one parse, meaning it's not possible to reference
 something declared after the executing statement.
+
+\section{Bindings and Arithmetic expressions}
+The following program declares a function that increments a value and
+calls it:
+\begin{lstlisting}
+decl(inc { r0+1 })
+print(inc(6) inc(8))
+\end{lstlisting}
+
+When you run the program, it should print 79.
+
+Declaring a variable (binding) is done with the \texttt{decl()} function. It
+requires a name (identifier) and a value. As mentioned, in HLIM, types are
+assigned to a value rather than an identifier. You can redeclare the
+identifier with a different value type, or assign an existing identifier
+with a value of different type. There are 3 basic data types in HLIM:
+numbers, strings, and blocks.
+\begin{itemize}
+    \item[Numbers] All numeric values are treated as single-precision
+        32-bit floats.
+    \item[Strings] An immutable sequence of ASCII characters.
+    \item[Blocks] The most powerful type, but will be covered later.
+\end{itemize}
+
+In contrary to conventional languages, HLIM does not provide the integer,
+char and boolean types.
+
+Arithmetic expressions in HLIM are, fortunately, done with infix notations.
+This is a trade-off between readability and minimalistic syntax. A
+minimalist language would use prefix (Lisp) or postfix (Forth), an older
+iteration of HLIM used Lisp-like prefix, but this harms readability too much
+for too little gain. When you write an arithmetic expression, the result is
+returned. In HLIM, expressions are also statements and thus it doesn't complain
+about unused expression results.
+
+\begin{lstlisting}
+5+6
+\end{lstlisting}
+
+The above code does nothing but holding the number 11 until it exits.
+
+In the code at the start of the section, more usage of the built-in function
+\texttt{print()}. \texttt{print()} will print everything supplied to it
+as arguments. This includes all 3 basic data types, and some extra ones used
+by FFI features of the language. \texttt{print()} can also print a
+function's AST because it's a Block.
 
 \end{document}
 
