@@ -198,7 +198,58 @@ The execution order, expression by expression:
 With Blocks and calls clearly explained, we can move on to control flows.
 
 \subsection{if-else}
-Here's a function to check if
+Here's a function that prints a number if it's even, and prints
+"boo" otherwise:
+\begin{lstlisting}
+decl(print_if_odd {
+    decl(mod r0%2)
+    if(mod==1 print(r0 "\n") print("boo\n"))
+})
+\end{lstlisting}
+
+The \texttt{if} operates as follows: the condition (the 1st expression) is
+first evaluated, if it's true, the \texttt{do} branch (the 2nd expression)
+is evaluated. Otherwise, the 3rd expression (\texttt{otherwise} branch) is
+evaluated if it exists.
+
+In HLIM, the condition is considered true only if:
+\begin{itemize}
+    \item The numeric expression is bigger than 0.
+    \item FFI handle and FFI symbol is valid
+        (will be mentioned later)
+\end{itemize}
+
+The rules of calls vs non-calls still apply to \texttt{if}:
+\begin{lstlisting}
+if(condition {
+    // do a bunch of things...
+}()) // <-- notice the trailing call operator
+\end{lstlisting}
+
+In an older iteration, blocks passed to \texttt{if} and \texttt{loop} are
+automatically executed without the call operator. This created headaches
+where \texttt{if} returning a Block is desired and was thus removed.
+
+Because \texttt{if} returns the expression result of the evaluated branch,
+it functions naturally as a ternary operator:
+\begin{lstlisting}
+decl(status if(is_logged_in "Welcome" "Login"))
+\end{lstlisting}
+
+You can use the non-call to create something like this:
+\begin{lstlisting}
+decl(func if(x { print("hi world\n") }))
+\end{lstlisting}
+where func becomes a function that when called, prints "hi world" if
+x is true, and an empty statement otherwise.
+
+Because the language is dynamic and weakly typed, one can do something
+like this without any errors or warnings:
+\begin{lstlisting}
+decl(func if(x { print("hi world\n") } 5))
+\end{lstlisting}
+however it might not be desired as applying call syntax on a number
+returns NIL (nothing, similar to void) instead of that number.
 
 \end{document}
 
