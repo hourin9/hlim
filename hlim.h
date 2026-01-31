@@ -84,6 +84,38 @@ struct AST *loop(struct AST *cond, struct AST *body);
 struct AST *call(struct AST *func, struct AST *argv);
 struct AST *dup(const struct AST*);
 
+// I added generous types here, just in case.
+// This is separated from ValueType despite looking
+// similar, as I expect to isolate this to HM analyze
+// phase and not runtime.
+enum TypeKind {
+        TYP_FFIHandle,
+        TYP_FFISym,
+        TYP_Nil,
+        TYP_Number,
+        TYP_String,
+        TYP_Var,
+        TYP_Pipe,
+        TYP_List,
+};
+
+struct Type {
+        enum TypeKind k;
+        union {
+                char var;
+                struct {
+                        struct Type *inp,
+                                    *out;
+                } pipe;
+        };
+
+        // Used for type resolving.
+        struct Type *parent;
+};
+
+struct Type *hm_find(struct Type*);
+bool hm_unify(struct Type *a, struct Type *b);
+
 enum ValueType {
         VAL_Nil,
         VAL_Num,
