@@ -14,10 +14,18 @@ int main(int argc, char **argv)
                 return 0;
 
         RST_t rst = init_runtime_symtable();
-        struct AST *cur = parser_ast;
-        while (cur != nullptr) {
-                evaluate_one(&rst, cur);
-                cur = cur->next;
+
+        // 1st pass: type checking
+        struct AST *check_cur = parser_ast;
+        while (check_cur != nullptr) {
+                check_cur = check_cur->next;
+        }
+
+        // 2nd pass: evaluation
+        struct AST *eval_cur = parser_ast;
+        while (eval_cur != nullptr) {
+                evaluate_one(&rst, eval_cur);
+                eval_cur = eval_cur->next;
         }
 
         return 0;
