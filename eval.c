@@ -5,7 +5,7 @@
 struct InterpValue evaluate_one(RST_t *st, const struct AST *n)
 {
         if (n == nullptr)
-                return (struct InterpValue){ .type = VAL_Nil };
+                return NIL_VALUE;
 
         switch (n->type) {
         case AST_Call:
@@ -56,7 +56,7 @@ struct InterpValue evaluate_one(RST_t *st, const struct AST *n)
                 };
 
         default:
-                return (struct InterpValue){ .type = VAL_Nil };
+                return NIL_VALUE;
         }
 }
 

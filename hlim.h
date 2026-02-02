@@ -121,11 +121,14 @@ struct InterpValue {
         struct SSTWrapper *scope;
 };
 
+#define NIL_VALUE (struct InterpValue){ .type = VAL_Nil }
+
 void print_value(struct InterpValue);
+
 float to_num(struct InterpValue);
 bool to_bool(struct InterpValue);
-struct AST *to_ast(struct InterpValue);
 
+struct AST *to_ast(struct InterpValue);
 const char *to_str(struct InterpValue);
 
 typedef struct {

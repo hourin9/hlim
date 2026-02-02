@@ -5,7 +5,7 @@
 struct InterpValue constant_fold(const struct AST *node)
 {
         if (node == nullptr)
-                return (struct InterpValue){ .type = VAL_Nil };
+                return NIL_VALUE;
 
         if (node->type == AST_NumericLiteral)
                 return (struct InterpValue){
@@ -14,12 +14,12 @@ struct InterpValue constant_fold(const struct AST *node)
                 };
 
         if (node->type != AST_Arit)
-                return (struct InterpValue){ .type = VAL_Nil };
+                return NIL_VALUE;
 
         struct InterpValue lhs = constant_fold(node->lhs),
                            rhs = constant_fold(node->rhs);
         if (lhs.type == VAL_Nil || rhs.type == VAL_Nil)
-                return (struct InterpValue){ .type = VAL_Nil };
+                return NIL_VALUE;
 
         struct AST *tmp = binary(
                 node->arit,

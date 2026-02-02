@@ -143,7 +143,7 @@ void rst_assign_index(RST_t *rst, char *id, int idx,
 struct InterpValue rst_find(RST_t *rst, char *id)
 {
         if (rst == nullptr)
-                return (struct InterpValue){ .type = VAL_Nil };
+                return NIL_VALUE;
         struct SSTWrapper *cur = rst->current;
         while (cur != nullptr) {
                 int index = shgeti(cur->table, id);
@@ -152,6 +152,6 @@ struct InterpValue rst_find(RST_t *rst, char *id)
                 cur = cur->parent;
         }
 
-        return (struct InterpValue){ .type = VAL_Nil };
+        return NIL_VALUE;
 }
 

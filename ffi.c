@@ -22,12 +22,12 @@ struct InterpValue handle_ffi_load(
         void *handle)
 {
         if (args[0].type != VAL_String)
-                return (struct InterpValue){ .type = VAL_Nil };
+                return NIL_VALUE;
 
         void *ptr = dlsym(handle, args[0].str);
 
         if (!ptr)
-                return (struct InterpValue){ .type = VAL_Nil };
+                return NIL_VALUE;
 
         char *sig = (arrlen(args) > 1)
                 ? strdup(to_str(args[1]))
@@ -133,11 +133,11 @@ struct InterpValue handle_ffi_call(
         );
 
         if (status != FFI_OK)
-                return (struct InterpValue){ .type = VAL_Nil };
+                return NIL_VALUE;
 
         if (return_type == &ffi_type_void) {
                 ffi_call(&cif, FFI_FN(call_handle.ptr), nullptr, values);
-                return (struct InterpValue){ .type = VAL_Nil };
+                return NIL_VALUE;
         }
 
         ffi_arg result;

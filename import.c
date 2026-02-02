@@ -16,6 +16,6 @@ struct InterpValue handle_import(RST_t *t, const struct AST *n)
                         };
         }
 
-        return (struct InterpValue){ .type = VAL_Nil };
+        return NIL_VALUE;
 }
 
