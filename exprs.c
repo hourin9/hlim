@@ -128,6 +128,8 @@ struct InterpValue handle_asn(RST_t *st, const struct AST *n)
         if (id->type == AST_Arit && id->arit == ART_Index) {
                 printf("Index assign\n");
                 int index = to_num(evaluate_one(st, id->rhs));
+
+                // TODO: does this work with multi-level nested lists?
                 rst_assign_index(st, id->lhs->sval, index, v);
         }
         else

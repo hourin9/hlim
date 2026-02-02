@@ -82,8 +82,8 @@ decl_body: ID expr {
          }
          ;
 
-asn_body: ID expr {
-                struct AST *args = string($1);
+asn_body: list_index expr {
+                struct AST *args = $1;
                 args->next = $2;
                 $$ = node(AST_Asn, args);
         }
