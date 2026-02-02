@@ -32,7 +32,7 @@ struct AST *parser_ast;
 %token <str> ID
 %token <str> STR_LIT
 
-%type <node> stmt_list stmt expr block binary_operation primary
+%type <node> stmt_list stmt expr block binary_op primary
 %type <node> decl_body asn_body params_opt id_list
 %type <node> call args_opt arg_list
 %type <node> if_body loop_body
@@ -101,7 +101,7 @@ expr: DECL '(' decl_body ')' { $$ = $3; }
     | ASN '(' asn_body ')' { $$ = $3; }
     | OPTIMIZE '(' stmt ')' { $$ = optimize($stmt); }
     | IMPORT '(' expr ')' { $$ = node(AST_Import, $3); }
-    | binary_operation
+    | binary_op
     | NOT expr { $$ = binary(ART_Not, $2, nullptr); }
     | IF '(' if_body ')' { $$ = $3; }
     | pipeline
@@ -112,13 +112,13 @@ list_index: primary
           | list_index ':' primary { $$ = binary(ART_Index, $1, $3); }
           ;
 
-binary_operation: expr '+' expr { $$ = binary(ART_Add, $1, $3); }
-                | expr '-' expr { $$ = binary(ART_Sub, $1, $3); }
-                | expr '*' expr { $$ = binary(ART_Mul, $1, $3); }
-                | expr '/' expr { $$ = binary(ART_Div, $1, $3); }
-                | expr '%' expr { $$ = binary(ART_Mod, $1, $3); }
-                | expr EQ expr { $$ = binary(ART_Eq, $1, $3); }
-                | expr NEQ expr { $$ = binary(ART_Neq, $1, $3); }
+binary_op: expr '+' expr { $$ = binary(ART_Add, $1, $3); }
+         | expr '-' expr { $$ = binary(ART_Sub, $1, $3); }
+         | expr '*' expr { $$ = binary(ART_Mul, $1, $3); }
+         | expr '/' expr { $$ = binary(ART_Div, $1, $3); }
+         | expr '%' expr { $$ = binary(ART_Mod, $1, $3); }
+         | expr EQ expr { $$ = binary(ART_Eq, $1, $3); }
+         | expr NEQ expr { $$ = binary(ART_Neq, $1, $3); }
                 ;
 
 block: params_opt '{' stmt_list '}' {
