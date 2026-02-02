@@ -125,7 +125,13 @@ struct InterpValue handle_asn(RST_t *st, const struct AST *n)
                 v = evaluate_one(st, val);
         }
 
-        rst_assign(st, id->sval, v);
+        if (id->type == AST_Arit && id->arit == ART_Index) {
+                printf("Index assign\n");
+                int index = to_num(evaluate_one(st, id->rhs));
+                rst_assign_index(st, id->lhs->sval, index, v);
+        }
+        else
+                rst_assign(st, id->sval, v);
         return v;
 }
 

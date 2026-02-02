@@ -89,6 +89,41 @@ void rst_assign(RST_t *rst, char *id, struct InterpValue val)
         }
 }
 
+void rst_assign_index(RST_t *rst, char *id, int idx,
+        struct InterpValue val)
+{
+        if (rst == nullptr)
+                return;
+        struct SSTWrapper *cur = rst->current;
+
+        while (cur != NULL) {
+                int index = shgeti(cur->table, id);
+
+                if (index != -1) {
+                        struct InterpValue *list =
+                                &cur->table[index].value;
+
+                        if (list->type != VAL_Node)
+                                return;
+
+                        struct AST *cur = list->node->body;
+
+                        // TODO: append to list if idx is -1.
+
+                        for (size_t i=0; i<(size_t)idx; i++)
+                                cur = cur->next;
+
+                        struct AST *next = cur->next;
+                        cur = to_ast(val);
+                        cur->next = next;
+
+                        return;
+                }
+
+                cur = cur->parent;
+        }
+}
+
 struct InterpValue rst_find(RST_t *rst, char *id)
 {
         if (rst == nullptr)

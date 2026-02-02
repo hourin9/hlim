@@ -121,6 +121,13 @@ struct InterpValue {
         struct SSTWrapper *scope;
 };
 
+void print_value(struct InterpValue);
+float to_num(struct InterpValue);
+bool to_bool(struct InterpValue);
+struct AST *to_ast(struct InterpValue);
+
+const char *to_str(struct InterpValue);
+
 typedef struct {
         char *key;
         struct InterpValue value;
@@ -148,12 +155,8 @@ SST_t *current_rt_scope(RST_t*);
 SST_t *global_rt_scope(RST_t*);
 void rst_declare(RST_t*, char *id, struct InterpValue val);
 void rst_assign(RST_t*, char *id, struct InterpValue val);
+void rst_assign_index(RST_t*, char *id, int index, struct InterpValue);
 struct InterpValue rst_find(RST_t*, char *id);
-
-void print_value(struct InterpValue);
-float to_num(struct InterpValue);
-bool to_bool(struct InterpValue);
-const char *to_str(struct InterpValue);
 
 struct InterpValue evaluate_list(RST_t*, const struct AST *root);
 struct InterpValue evaluate_one(RST_t*, const struct AST*);
