@@ -101,8 +101,15 @@ bool to_bool(struct InterpValue v)
         case VAL_Num:
                 return v.f32 != 0;
 
-        case VAL_FFILibHandle:
-                __attribute__((fallthrough));
+        case VAL_Node:
+                // TODO: should I also check if the body node
+                // is not empty?
+                return v.node != nullptr;
+
+        case VAL_String:
+                return v.str != nullptr && strlen(v.str) > 0;
+
+        case VAL_FFILibHandle: __attribute__((fallthrough));
         case VAL_FFISym:
                 return v.ptr != nullptr;
 
