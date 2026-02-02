@@ -89,6 +89,16 @@ void rst_assign(RST_t *rst, char *id, struct InterpValue val)
         }
 }
 
+static void _rst_append_list(
+        struct AST *list,
+        struct InterpValue v)
+{
+        while (list->next != nullptr)
+                list = list->next;
+
+        list->next = to_ast(v);
+}
+
 void rst_assign_index(RST_t *rst, char *id, int idx,
         struct InterpValue val)
 {
@@ -108,7 +118,8 @@ void rst_assign_index(RST_t *rst, char *id, int idx,
 
                         struct AST **cur = &list->node->body;
 
-                        // TODO: append to list if idx is -1.
+                        if (idx == -1)
+                                return _rst_append_list(*cur, val);
 
                         for (size_t i=0; i<(size_t)idx; i++)
                                 cur = &((*cur)->next);
