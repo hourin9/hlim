@@ -10,6 +10,6 @@ assert(list:0 == 5 "List asn failed")
 asn(list:1 [5 + list:0])
 assert(list:1 10 "List asn failed")
 
-asn(list:[0-1] 62.54)
+asn(list:[-1] 62.54)
 assert(list:5 == 62.54 "List append failed")
 

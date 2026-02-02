@@ -90,6 +90,7 @@ asn_body: list_index expr {
         ;
 
 primary: NUM_LIT { $$ = number($1); }
+       | '[' '-' NUM_LIT ']' { $$ = number(-$NUM_LIT); }
        | STR_LIT { $$ = string($1); }
        | ID { $$ = id($1); }
        | block
