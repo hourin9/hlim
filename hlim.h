@@ -83,6 +83,7 @@ struct AST *branch(struct AST *cond, struct AST *then,
 struct AST *loop(struct AST *cond, struct AST *body);
 struct AST *call(struct AST *func, struct AST *argv);
 struct AST *dup(const struct AST*);
+struct AST *deep_dup(const struct AST*);
 
 enum ValueType {
         VAL_Nil,

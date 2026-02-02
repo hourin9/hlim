@@ -120,3 +120,24 @@ struct AST *dup(const struct AST *t)
         return n;
 }
 
+struct AST *deep_dup(const struct AST *t)
+{
+        if (t == nullptr)
+                return nullptr;
+
+        struct AST *n = malloc(sizeof(*n));
+        memcpy(n, t, sizeof(*n));
+
+        if (t->sval != nullptr)
+                n->sval = strdup(t->sval);
+
+        n->lhs = deep_dup(n->lhs);
+        n->rhs = deep_dup(n->rhs);
+
+        n->args = deep_dup(n->args);
+        n->params = deep_dup(n->params);
+        n->next = deep_dup(n->next);
+
+        return n;
+}
+

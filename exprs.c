@@ -98,7 +98,7 @@ struct InterpValue handle_decl(RST_t *st, const struct AST *n)
         if (val->type == AST_Block) {
                 v = (struct InterpValue){
                         .type = VAL_Node,
-                        .node = val,
+                        .node = deep_dup(val),
                         .scope = st->current,
                 };
         } else {
@@ -118,7 +118,7 @@ struct InterpValue handle_asn(RST_t *st, const struct AST *n)
         if (val->type == AST_Block) {
                 v = (struct InterpValue){
                         .type = VAL_Node,
-                        .node = val,
+                        .node = deep_dup(n),
                         .scope = st->current,
                 };
         } else {
