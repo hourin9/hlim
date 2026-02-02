@@ -1,0 +1,15 @@
+decl(list { 1.5 2 4.3 4 5 })
+
+assert(list:1 == 2 "Basic indexing failed")
+assert(list:3 == 4 "Basic indexing failed")
+assert(list:2 == 4.3 "Basic indexing failed")
+
+asn(list:0 5)
+assert(list:0 == 5 "List asn failed")
+
+asn(list:1 [5 + list:0])
+assert(list:1 10 "List asn failed")
+
+asn(list:[0-1] 62.54)
+assert(list:5 == 62.54 "List append failed")
+
