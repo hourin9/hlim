@@ -46,8 +46,10 @@ struct InterpValue handle_call(RST_t *st, const struct AST *n)
                 struct InterpValue res = args[0];
 
                 // Assertion succeeded
-                if (to_bool(res))
+                if (to_bool(res)) {
+                        arrfree(args);
                         return final;
+                }
 
                 // Assertion failed
                 for (size_t i=1; i<arrlen(args); i++)
@@ -55,6 +57,7 @@ struct InterpValue handle_call(RST_t *st, const struct AST *n)
 
                 // TODO: use a Result struct or something to handle returns
                 // and exits instead of directly calling exit() from func.
+                arrfree(args);
                 exit(-1);
         }
 
