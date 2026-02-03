@@ -26,6 +26,10 @@ void destroy_runtime_symtable(RST_t *st)
                 for (int i=0; i<shlen(cur->table); i++) {
                         // I freed the keys somewhere...
                         // free(cur->table[i].key);
+
+                        if (cur->table[i].value.type == VAL_Node) {
+                                deep_del(cur->table[i].value.node);
+                        }
                 }
 
                 shfree(cur->table);
