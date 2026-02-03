@@ -109,6 +109,14 @@ struct InterpValue handle_decl(RST_t *st, const struct AST *n)
         return v;
 }
 
+// Returns identifier for list index operation
+static char *_leftmost_index(const struct AST *root)
+{
+        if (root->type == AST_Id)
+                return root->sval;
+        return _leftmost_index(root->lhs);
+}
+
 struct InterpValue handle_asn(RST_t *st, const struct AST *n)
 {
         struct InterpValue v;
@@ -128,8 +136,8 @@ struct InterpValue handle_asn(RST_t *st, const struct AST *n)
         if (id->type == AST_Arit && id->arit == ART_Index) {
                 int index = to_num(evaluate_one(st, id->rhs));
 
-                // TODO: does this work with multi-level nested lists?
-                rst_assign_index(st, id->lhs->sval, index, v);
+                // TODO: make this work with multi-level nested lists
+                rst_assign_index(st, _leftmost_index(id), index, v);
         }
         else
                 rst_assign(st, id->sval, v);
