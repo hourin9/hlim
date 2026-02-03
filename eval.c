@@ -11,6 +11,12 @@ struct InterpValue evaluate_one(RST_t *st, const struct AST *n)
         case AST_Call:
                 return handle_call(st, n);
 
+        case AST_Include:
+        {
+                struct InterpValue file = evaluate_one(st, n->args);
+                return handle_include(st, file);
+        }
+
         case AST_Import:
                 return handle_import(st, n);
 
