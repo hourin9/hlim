@@ -21,6 +21,7 @@ int main(int argc, char **argv)
         }
 
         deep_del(parser_ast);
+        destroy_runtime_symtable(&rst);
         return 0;
 }
 

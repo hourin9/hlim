@@ -158,6 +158,7 @@ struct RuntimeSymTable {
 typedef struct RuntimeSymTable RST_t;
 
 RST_t init_runtime_symtable();
+void destroy_runtime_symtable(RST_t*);
 void rst_new_scope(RST_t*);
 void rst_pop_scope(RST_t*);
 void rst_closure(RST_t*, struct SSTWrapper*);

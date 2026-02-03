@@ -14,6 +14,29 @@ RST_t init_runtime_symtable()
         return rst;
 }
 
+void destroy_runtime_symtable(RST_t *st)
+{
+        if (!st || !st->current)
+                return;
+
+        struct SSTWrapper *cur = st->current;
+        while (cur != nullptr) {
+                struct SSTWrapper *par = cur->parent;
+
+                for (int i=0; i<shlen(cur->table); i++) {
+                        // I freed the keys somewhere...
+                        // free(cur->table[i].key);
+                }
+
+                shfree(cur->table);
+                free(cur);
+
+                cur = par;
+        }
+
+        st->current = nullptr;
+}
+
 void rst_new_scope(RST_t *rst)
 {
         if (rst == nullptr)
