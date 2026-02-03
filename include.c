@@ -3,10 +3,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-typedef struct yy_buffer_state *YY_BUFFER_STATE;
-extern YY_BUFFER_STATE yy_create_buffer(FILE *file, int size);
-extern void yy_switch_to_buffer(YY_BUFFER_STATE new_buffer);
-extern void yy_delete_buffer(YY_BUFFER_STATE buffer);
+extern void yyrestart(FILE*);
 extern int yyparse();
 extern struct AST *parser_ast;
 
@@ -19,8 +16,7 @@ struct InterpValue handle_include(RST_t *st, struct InterpValue arg)
         if (!f)
                 return NUM_VALUE(-1);
 
-        YY_BUFFER_STATE buf = yy_create_buffer(f, BUFSIZ);
-        yy_switch_to_buffer(buf);
+        yyrestart(f);
 
         if (yyparse() != 0)
                 return NIL_VALUE;
@@ -33,7 +29,6 @@ struct InterpValue handle_include(RST_t *st, struct InterpValue arg)
                 // TODO: destroy the included tree's AST
         }
 
-        yy_delete_buffer(buf);
         fclose(f);
 
         return NUM_VALUE(0);
