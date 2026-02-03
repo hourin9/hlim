@@ -80,7 +80,7 @@ void print_value(struct InterpValue v)
                 break;
 
         case VAL_Node:
-                recursive_print(stdout, v.node, 0);
+                recursive_print(stdout, v.node, 0, false);
                 break;
 
         case VAL_FFILibHandle:

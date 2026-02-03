@@ -58,7 +58,8 @@ struct AST {
         struct AST *next;
 };
 
-void recursive_print(FILE*, const struct AST*, int depth);
+void recursive_print(FILE*, const struct AST*,
+        int depth, bool follow_next);
 
 struct AST *find_end(struct AST*);
 

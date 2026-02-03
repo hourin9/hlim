@@ -2,7 +2,8 @@
 
 #include <stdio.h>
 
-void recursive_print(FILE *where, const struct AST *node, int depth)
+void recursive_print(FILE *where, const struct AST *node,
+        int depth, bool follow)
 {
         if (!node)
                 return;
@@ -16,20 +17,26 @@ void recursive_print(FILE *where, const struct AST *node, int depth)
 
         if (node->lhs) {
                 fprintf(where, "%*sLHS:\n", depth, "");
-                recursive_print(where, node->lhs, depth + 4);
+                recursive_print(where, node->lhs, depth + 4, follow);
         }
+
+
         if (node->rhs) {
                 fprintf(where, "%*sRHS:\n", depth, "");
-                recursive_print(where, node->rhs, depth + 4);
+                recursive_print(where, node->rhs,
+                        depth + 4, (node->type == AST_Block));
         }
 
         if (node->args) {
                 fprintf(where, "%*sARGS: (\n", depth, "");
-                recursive_print(where, node->args, depth + 4);
+                recursive_print(where, node->args, depth + 4, follow);
                 fprintf(where, "%*s)\n", depth, "");
         }
 
+        if (!follow)
+                return;
+
         if (node->next)
-                recursive_print(where, node->next, depth);
+                recursive_print(where, node->next, depth, follow);
 }
 
