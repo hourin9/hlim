@@ -23,6 +23,7 @@ struct AST *parser_ast;
 %token EQ
 %token IF
 %token IMPORT
+%token INCLUDE
 %token LOOP
 %token NEQ
 %token NOT
@@ -101,6 +102,7 @@ expr: DECL '(' decl_body ')' { $$ = $3; }
     | ASN '(' asn_body ')' { $$ = $3; }
     | OPTIMIZE '(' stmt ')' { $$ = optimize($stmt); }
     | IMPORT '(' expr ')' { $$ = node(AST_Import, $3); }
+    | INCLUDE '(' expr ')' { $$ = node(AST_Include, $3); }
     | binary_op
     | NOT expr { $$ = binary(ART_Not, $2, nullptr); }
     | IF '(' if_body ')' { $$ = $3; }
@@ -109,7 +111,9 @@ expr: DECL '(' decl_body ')' { $$ = $3; }
     ;
 
 list_index: primary
-          | list_index ':' primary { $$ = binary(ART_Index, $1, $3); }
+          | list_index ':' primary {
+                $$ = binary(ART_Index, $1, $3);
+          }
           ;
 
 binary_op: expr '+' expr { $$ = binary(ART_Add, $1, $3); }
