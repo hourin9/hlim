@@ -113,7 +113,7 @@ struct AST *call(struct AST *func, struct AST *args)
         return call;
 }
 
-struct AST *dup(const struct AST *t)
+struct AST *shallow_dup(const struct AST *t)
 {
         struct AST *n = malloc(sizeof(*n));
         memcpy(n, t, sizeof(*n));

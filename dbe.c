@@ -14,7 +14,7 @@ struct InterpValue eliminate_dead_branches(struct AST *n)
 
                 // Always true
                 if (to_bool(cond)) {
-                        result = dup(n->args);
+                        result = shallow_dup(n->args);
 
                         // Clear the else branch
                         result->next = nullptr;
@@ -22,7 +22,7 @@ struct InterpValue eliminate_dead_branches(struct AST *n)
 
                 // Always false
                 else {
-                        result = dup(n->args->next);
+                        result = shallow_dup(n->args->next);
                 }
 
                 return (struct InterpValue){
@@ -37,7 +37,7 @@ struct InterpValue eliminate_dead_branches(struct AST *n)
                         return (struct InterpValue){
                                 .type = VAL_Node,
                                 .node = (next != nullptr)
-                                        ? dup(next)
+                                        ? shallow_dup(next)
                                         : nullptr,
                         };
                 }

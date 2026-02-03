@@ -17,6 +17,7 @@ enum ASTType {
         AST_Loop,
         AST_Arit,
         AST_Import,
+        AST_Include,
 };
 
 enum ArtType {
@@ -83,7 +84,7 @@ struct AST *branch(struct AST *cond, struct AST *then,
         struct AST *otherwise);
 struct AST *loop(struct AST *cond, struct AST *body);
 struct AST *call(struct AST *func, struct AST *argv);
-struct AST *dup(const struct AST*);
+struct AST *shallow_dup(const struct AST*);
 struct AST *deep_dup(const struct AST*);
 
 enum ValueType {
@@ -124,6 +125,7 @@ struct InterpValue {
 };
 
 #define NIL_VALUE (struct InterpValue){ .type = VAL_Nil }
+#define NUM_VALUE(x) (struct InterpValue){ .type = VAL_Num, .f32 = x }
 
 void print_value(struct InterpValue);
 
@@ -175,6 +177,7 @@ struct InterpValue handle_loop(RST_t*, const struct AST*);
 struct InterpValue handle_arithmetic(RST_t*, const struct AST*);
 struct InterpValue handle_indexing(RST_t*, const struct AST*);
 struct InterpValue handle_import(RST_t*, const struct AST*);
+struct InterpValue handle_include(RST_t*, struct InterpValue);
 struct InterpValue handle_ffi_load(
         const struct InterpValue *arg,
         void *handle);
