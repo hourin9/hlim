@@ -148,6 +148,7 @@ struct AST *shallow_dup(const struct AST *t)
 {
         struct AST *n = malloc(sizeof(*n));
         memcpy(n, t, sizeof(*n));
+        n->shallow_copy = true;
         return n;
 }
 

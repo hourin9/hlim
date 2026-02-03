@@ -37,6 +37,7 @@ struct AST {
         enum ASTType type;
         enum ArtType arit;
         float f32;
+        bool shallow_copy;
 
         union {
                 char *sval,

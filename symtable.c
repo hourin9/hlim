@@ -27,8 +27,14 @@ void destroy_runtime_symtable(RST_t *st)
                         // I freed the keys somewhere...
                         // free(cur->table[i].key);
 
-                        if (cur->table[i].value.type == VAL_Node) {
-                                deep_del(cur->table[i].value.node);
+                        struct InterpValue v = cur->table[i].value;
+                        if (v.type == VAL_Node) {
+                                if (v.node->shallow_copy) {
+                                        shallow_del(v.node);
+                                        free(v.node);
+                                }
+                                else
+                                        deep_del(v.node);
                         }
                 }
 
