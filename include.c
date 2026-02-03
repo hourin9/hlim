@@ -25,8 +25,6 @@ struct InterpValue handle_include(RST_t *st, struct InterpValue arg)
         while (cur != nullptr) {
                 evaluate_one(st, cur);
                 cur = cur->next;
-
-                // TODO: destroy the included tree's AST
         }
 
         fclose(f);

@@ -84,8 +84,12 @@ struct AST *branch(struct AST *cond, struct AST *then,
         struct AST *otherwise);
 struct AST *loop(struct AST *cond, struct AST *body);
 struct AST *call(struct AST *func, struct AST *argv);
+
 struct AST *shallow_dup(const struct AST*);
 struct AST *deep_dup(const struct AST*);
+
+void shallow_del(struct AST*);
+void deep_del(struct AST*);
 
 enum ValueType {
         VAL_Nil,

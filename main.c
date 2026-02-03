@@ -20,6 +20,7 @@ int main(int argc, char **argv)
                 cur = cur->next;
         }
 
+        deep_del(parser_ast);
         return 0;
 }
 

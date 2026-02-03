@@ -113,6 +113,37 @@ struct AST *call(struct AST *func, struct AST *args)
         return call;
 }
 
+void shallow_del(struct AST *t)
+{
+        if (t == nullptr)
+                return;
+
+        bool str_type = t->type == AST_StringLiteral ||
+                t->type == AST_Id;
+
+        if (str_type && t->sval != nullptr)
+                free(t->sval);
+}
+
+void deep_del(struct AST *t)
+{
+        // Recommended by AI as linked list might be long,
+        // potentially causing a stack overflow.
+        while (t != nullptr) {
+                deep_del(t->lhs);
+                deep_del(t->rhs);
+
+                deep_del(t->args);
+                deep_del(t->params);
+
+                struct AST *next = t->next;
+                shallow_del(t);
+                free(t);
+
+                t = next;
+        }
+}
+
 struct AST *shallow_dup(const struct AST *t)
 {
         struct AST *n = malloc(sizeof(*n));
