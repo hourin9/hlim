@@ -150,7 +150,11 @@ typedef ScopeSymTable_t SST_t;
 struct SSTWrapper {
         SST_t *table;
         struct SSTWrapper *parent;
+        int ref_count;
 };
+
+struct SSTWrapper *new_closure(struct SSTWrapper *par);
+void decref_closure(struct SSTWrapper*);
 
 struct RuntimeSymTable {
         struct SSTWrapper *current;

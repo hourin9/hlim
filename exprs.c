@@ -86,7 +86,10 @@ struct InterpValue handle_call(RST_t *st, const struct AST *n)
         rst_closure(st, func.scope);
         push_args_params(st, func.node->params, args);
         final = evaluate_list(st, func.node->body);
+
+        struct SSTWrapper *old_scope = st->current;
         st->current = caller_scope;
+        decref_closure(old_scope);
 
         arrfree(args);
         return final;

@@ -4,13 +4,42 @@
 
 #include "external/stb_ds.h"
 
+struct SSTWrapper *new_closure(struct SSTWrapper *par)
+{
+        struct SSTWrapper *sw = malloc(sizeof(*sw));
+        sw->table = nullptr;
+        sw->parent = par;
+        sw->ref_count = 1;
+        if (par)
+                sw->parent->ref_count ++;
+        return sw;
+}
+
+void decref_closure(struct SSTWrapper *cl)
+{
+        if (cl == nullptr)
+                return;
+
+        cl->ref_count --;
+
+        if (cl->ref_count <= 0) {
+                struct SSTWrapper *p = cl->parent;
+
+                for (size_t i=0; i<shlen(cl->table); i++) {
+                        // TODO: clean up nodes
+                }
+
+                shfree(cl->table);
+                free(cl);
+
+                decref_closure(p);
+        }
+}
+
 RST_t init_runtime_symtable()
 {
         RST_t rst = { 0 };
-        struct SSTWrapper *global = malloc(sizeof(*global));
-        global->table = nullptr;
-        global->parent = nullptr;
-        rst.current = global;
+        rst.current = new_closure(nullptr);
         return rst;
 }
 
@@ -73,11 +102,7 @@ void rst_closure(RST_t *rst, struct SSTWrapper *capture)
 {
         if (rst == nullptr)
                 return;
-        struct SSTWrapper *scope = malloc(sizeof(*scope));
-        scope->table = nullptr;
-
-        scope->parent = capture;
-        rst->current = scope;
+        rst->current = new_closure(capture);
 }
 
 SST_t *global_rt_scope(RST_t *rst)
