@@ -154,6 +154,7 @@ struct SSTWrapper {
 };
 
 struct SSTWrapper *new_closure(struct SSTWrapper *par);
+void clean_closure(struct SSTWrapper*);
 void decref_closure(struct SSTWrapper*);
 
 struct RuntimeSymTable {

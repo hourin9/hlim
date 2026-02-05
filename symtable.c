@@ -15,6 +15,24 @@ struct SSTWrapper *new_closure(struct SSTWrapper *par)
         return sw;
 }
 
+void clean_closure(struct SSTWrapper *cl)
+{
+        if (cl == nullptr)
+                return;
+
+        for (size_t i=0; i<shlen(cl->table); i++) {
+                struct InterpValue *v = &cl->table[i].value;
+
+                if (v->type == VAL_String)
+                        free(v->str);
+
+                if (v->type != VAL_Node)
+                        continue;
+
+                // TODO: implement ref counting for AST nodes.
+        }
+}
+
 void decref_closure(struct SSTWrapper *cl)
 {
         if (cl == nullptr)
@@ -25,10 +43,7 @@ void decref_closure(struct SSTWrapper *cl)
         if (cl->ref_count <= 0) {
                 struct SSTWrapper *p = cl->parent;
 
-                for (size_t i=0; i<shlen(cl->table); i++) {
-                        // TODO: clean up nodes
-                }
-
+                clean_closure(cl);
                 shfree(cl->table);
                 free(cl);
 
