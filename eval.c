@@ -50,6 +50,11 @@ struct InterpValue evaluate_one(RST_t *st, struct AST *n)
                 // So that node doesn't have to be un-const'ed
                 // struct AST *block = shallow_dup(n);
                 struct AST *block = n;
+
+                // So that when the outer scope doesn't also die
+                // when closure is cleaned.
+                st->current->ref_count ++;
+
                 return (struct InterpValue){
                         .type = VAL_Node,
                         .node = block,

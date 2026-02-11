@@ -40,7 +40,7 @@ void decref_closure(struct SSTWrapper *cl)
 
         cl->ref_count --;
 
-        if (cl->ref_count <= 0) {
+        if (cl->ref_count == 0) {
                 struct SSTWrapper *p = cl->parent;
 
                 clean_closure(cl);
@@ -48,6 +48,9 @@ void decref_closure(struct SSTWrapper *cl)
                 free(cl);
 
                 decref_closure(p);
+        } else if (cl->ref_count < 0) {
+                fprintf(stderr, "double decref() err\n");
+                exit(-1);
         }
 }
 
@@ -55,6 +58,7 @@ RST_t init_runtime_symtable()
 {
         RST_t rst = { 0 };
         rst.current = new_closure(nullptr);
+        rst.current->ref_count = 50;
         return rst;
 }
 
