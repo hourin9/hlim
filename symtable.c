@@ -71,6 +71,10 @@ void destroy_runtime_symtable(RST_t *st)
         while (cur != nullptr) {
                 struct SSTWrapper *par = cur->parent;
 
+                /*
+                 * Becomes problematic due to AST node ownership.
+                 * For now I have to comment out this block and bear the leaks.
+
                 for (int i=0; i<shlen(cur->table); i++) {
                         // I freed the keys somewhere...
                         // free(cur->table[i].key);
@@ -85,6 +89,8 @@ void destroy_runtime_symtable(RST_t *st)
                                         deep_del(v.node);
                         }
                 }
+
+                */
 
                 shfree(cur->table);
                 free(cur);
