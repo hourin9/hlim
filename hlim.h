@@ -176,9 +176,9 @@ void rst_assign(RST_t*, char *id, struct InterpValue val);
 void rst_assign_index(RST_t*, char *id, int index, struct InterpValue);
 struct InterpValue rst_find(RST_t*, char *id);
 
-struct InterpValue evaluate_list(RST_t*, const struct AST *root);
-struct InterpValue evaluate_one(RST_t*, const struct AST*);
-struct InterpValue *evaluate_arg_list(RST_t*, const struct AST*);
+struct InterpValue evaluate_list(RST_t*, struct AST *root);
+struct InterpValue evaluate_one(RST_t*, struct AST*);
+struct InterpValue *evaluate_arg_list(RST_t*, struct AST*);
 
 struct InterpValue handle_branching(RST_t*, const struct AST*);
 struct InterpValue handle_call(RST_t*, const struct AST*);
@@ -208,7 +208,7 @@ void push_args_simple(RST_t*, struct InterpValue *argv);
 // good as it'd make the if() evaluates differently from other
 // expressions. I prefer predictability.
 __attribute__((deprecated))
-struct InterpValue evaluate_block(RST_t*, const struct AST *root);
+struct InterpValue evaluate_block(RST_t*, struct AST *root);
 
 struct InterpValue constant_fold(const struct AST*);
 struct InterpValue eliminate_dead_branches(struct AST*);

@@ -2,7 +2,7 @@
 
 #include "external/stb_ds.h"
 
-struct InterpValue evaluate_one(RST_t *st, const struct AST *n)
+struct InterpValue evaluate_one(RST_t *st, struct AST *n)
 {
         if (n == nullptr)
                 return NIL_VALUE;
@@ -48,7 +48,8 @@ struct InterpValue evaluate_one(RST_t *st, const struct AST *n)
 
         case AST_Block:
                 // So that node doesn't have to be un-const'ed
-                struct AST *block = shallow_dup(n);
+                // struct AST *block = shallow_dup(n);
+                struct AST *block = n;
                 return (struct InterpValue){
                         .type = VAL_Node,
                         .node = block,
@@ -138,16 +139,16 @@ const char *to_str(struct InterpValue v)
         return nullptr;
 }
 
-struct InterpValue evaluate_block(RST_t *rst, const struct AST *root)
+struct InterpValue evaluate_block(RST_t *rst, struct AST *root)
 {
         if (root->type == AST_Block)
                 return evaluate_list(rst, root->body);
         return evaluate_one(rst, root);
 }
 
-struct InterpValue evaluate_list(RST_t *rst, const struct AST *root)
+struct InterpValue evaluate_list(RST_t *rst, struct AST *root)
 {
-        const struct AST *cur = root;
+        struct AST *cur = root;
         struct InterpValue v = { 0 };
         while (cur != nullptr) {
                 v = evaluate_one(rst, cur);
@@ -156,11 +157,11 @@ struct InterpValue evaluate_list(RST_t *rst, const struct AST *root)
         return v;
 }
 
-struct InterpValue *evaluate_arg_list(RST_t *rst, const struct AST *args)
+struct InterpValue *evaluate_arg_list(RST_t *rst, struct AST *args)
 {
         struct InterpValue *argv = nullptr;
 
-        const struct AST *arg = args;
+        struct AST *arg = args;
         while (arg != nullptr) {
                 struct InterpValue val = evaluate_one(rst, arg);
                 arrput(argv, val);
