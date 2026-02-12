@@ -20,6 +20,7 @@ struct AST *parser_ast;
 
 %token ASN
 %token DECL
+%token DROP
 %token EQ
 %token IF
 %token IMPORT
@@ -99,6 +100,7 @@ primary: NUM_LIT { $$ = number($1); }
        ;
 
 expr: DECL '(' decl_body ')' { $$ = $3; }
+    | DROP '(' ID ')' { $$ = node(AST_Drop, id($ID)); }
     | ASN '(' asn_body ')' { $$ = $3; }
     | OPTIMIZE '(' stmt ')' { $$ = optimize($stmt); }
     | IMPORT '(' expr ')' { $$ = node(AST_Import, $3); }

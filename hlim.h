@@ -8,6 +8,7 @@ enum ASTType {
         AST_Invalid,
         AST_Asn,
         AST_Decl,
+        AST_Drop,
         AST_StringLiteral,
         AST_NumericLiteral,
         AST_Block,
@@ -174,6 +175,7 @@ SST_t *global_rt_scope(RST_t*);
 void rst_declare(RST_t*, char *id, struct InterpValue val);
 void rst_assign(RST_t*, char *id, struct InterpValue val);
 void rst_assign_index(RST_t*, char *id, int index, struct InterpValue);
+void rst_drop(RST_t*, const char *id);
 struct InterpValue rst_find(RST_t*, char *id);
 
 struct InterpValue evaluate_list(RST_t*, struct AST *root);
@@ -183,6 +185,7 @@ struct InterpValue *evaluate_arg_list(RST_t*, struct AST*);
 struct InterpValue handle_branching(RST_t*, const struct AST*);
 struct InterpValue handle_call(RST_t*, const struct AST*);
 struct InterpValue handle_decl(RST_t*, const struct AST*);
+struct InterpValue handle_drop(RST_t*, const struct AST*);
 struct InterpValue handle_asn(RST_t*, const struct AST*);
 struct InterpValue handle_loop(RST_t*, const struct AST*);
 struct InterpValue handle_arithmetic(RST_t*, const struct AST*);

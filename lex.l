@@ -43,6 +43,7 @@ static char *_process_str(char *raw)
 
 "asn" { return ASN; }
 "decl" { return DECL; }
+"drop" { return DROP; }
 "if" { return IF; }
 "loop" { return LOOP; }
 "optimize" { return OPTIMIZE; }
