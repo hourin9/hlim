@@ -223,6 +223,50 @@ void rst_assign_index(RST_t *rst, char *id, int idx,
         }
 }
 
+void rst_drop(RST_t *rst, const char *id)
+{
+        if (rst == nullptr)
+                return;
+
+        struct SSTWrapper *cur = rst->current;
+        while (cur != nullptr) {
+                int index = shgeti(cur->table, id);
+                if (index == -1) {
+                        cur = cur->parent;
+                        continue;
+                }
+
+                struct InterpValue *v = &cur->table[index].value;
+
+                if (v->type == VAL_String) {
+                        /* String type is handled by AST...
+                        free(v->str);
+                        v->str = nullptr;
+                        */
+                }
+
+                else if (v->type == VAL_Node) {
+                        if (v->node->shallow_copy)
+                                shallow_del(v->node);
+                        /* TODO: fix the AST tree functions so that they
+                         * don't travel the next pointer.
+                        else
+                                deep_del(v->node);
+                        */
+                }
+
+                else if (v->type == VAL_FFILibHandle)
+                        close_dl(*v);
+
+                else if (v->type == VAL_FFISym)
+                        v->ptr = nullptr;
+
+                int a = shdel(cur->table, id);
+                (void)a;
+                break;
+        }
+}
+
 struct InterpValue rst_find(RST_t *rst, char *id)
 {
         if (rst == nullptr)

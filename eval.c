@@ -34,6 +34,9 @@ struct InterpValue evaluate_one(RST_t *st, struct AST *n)
         case AST_Decl:
                 return handle_decl(st, n);
 
+        case AST_Drop:
+                return handle_drop(st, n);
+
         case AST_Id:
                 return rst_find(st, n->sval);
 

@@ -198,6 +198,7 @@ struct InterpValue handle_ffi_load(
 struct InterpValue handle_ffi_call(
         struct InterpValue *args,
         struct InterpValue call_handle);
+void close_dl(struct InterpValue);
 
 void push_args_params(RST_t*, const struct AST *params,
         struct InterpValue *argv);

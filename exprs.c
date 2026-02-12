@@ -115,6 +115,20 @@ struct InterpValue handle_decl(RST_t *st, const struct AST *n)
         return v;
 }
 
+struct InterpValue handle_drop(RST_t *st, const struct AST *n)
+{
+        const struct AST *id = n->args;
+        if (id == nullptr)
+                return NIL_VALUE;
+
+        if (id->type != AST_Id && id->sval == nullptr)
+                return NIL_VALUE;
+
+        fprintf(stderr, "dropping %s\n", id->sval);
+        rst_drop(st, id->sval);
+        return NIL_VALUE;
+}
+
 // Returns identifier for list index operation
 static char *_leftmost_index(const struct AST *root)
 {
