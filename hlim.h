@@ -93,6 +93,8 @@ struct AST *deep_dup(const struct AST*);
 void shallow_del(struct AST*);
 void deep_del(struct AST*);
 
+void destroy_ast_tree(struct AST*);
+
 enum ValueType {
         VAL_Nil,
         VAL_Num,

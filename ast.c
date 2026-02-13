@@ -127,20 +127,24 @@ void shallow_del(struct AST *t)
 
 void deep_del(struct AST *t)
 {
-        // Recommended by AI as linked list might be long,
-        // potentially causing a stack overflow.
-        while (t != nullptr) {
-                deep_del(t->lhs);
-                deep_del(t->rhs);
+        if (t == nullptr)
+                return;
 
-                deep_del(t->args);
-                deep_del(t->params);
+        destroy_ast_tree(t->lhs);
+        destroy_ast_tree(t->rhs);
+        destroy_ast_tree(t->args);
+        destroy_ast_tree(t->params);
 
-                struct AST *next = t->next;
-                shallow_del(t);
-                free(t);
+        shallow_del(t);
+        free(t);
+}
 
-                t = next;
+void destroy_ast_tree(struct AST *root)
+{
+        while (root != nullptr) {
+                struct AST *next = root->next;
+                deep_del(root);
+                root = next;
         }
 }
 
