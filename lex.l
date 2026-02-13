@@ -89,6 +89,17 @@ static char *_process_str(char *raw)
         return NUM_LIT;
 }
 
+"'"[^']"'" {
+        yylval.f32 = yytext[1];
+        return NUM_LIT;
+}
+
+"''" {
+        // Handle case for empty char
+        yylval.f32 = 0;
+        return NUM_LIT;
+}
+
 [a-zA-Z_][a-zA-Z0-9_]* {
         yylval.str = strdup(yytext);
         return ID;
