@@ -1,0 +1,13 @@
+// TODO: add NIL type to parser so I can assert
+// the values. For now I'm relying on ASan for
+// leak detection.
+
+decl(number 10)
+drop(number)
+
+decl(function <x> { 1+5+x })
+drop(function)
+
+decl(closure { decl(x 1) { print("test " x "\n") } }())
+drop(closure)
+
