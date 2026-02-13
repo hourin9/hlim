@@ -124,7 +124,6 @@ struct InterpValue handle_drop(RST_t *st, const struct AST *n)
         if (id->type != AST_Id && id->sval == nullptr)
                 return NIL_VALUE;
 
-        fprintf(stderr, "dropping %s\n", id->sval);
         rst_drop(st, id->sval);
         return NIL_VALUE;
 }
