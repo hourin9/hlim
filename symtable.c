@@ -246,13 +246,11 @@ void rst_drop(RST_t *rst, const char *id)
                 }
 
                 else if (v->type == VAL_Node) {
+                        decref_closure(v->scope);
                         if (v->node->shallow_copy)
                                 shallow_del(v->node);
-                        /* TODO: fix the AST tree functions so that they
-                         * don't travel the next pointer.
                         else
                                 deep_del(v->node);
-                        */
                 }
 
                 else if (v->type == VAL_FFILibHandle)

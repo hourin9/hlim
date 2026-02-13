@@ -21,7 +21,7 @@ int main(int argc, char **argv)
         }
 
         destroy_runtime_symtable(&rst);
-        destroy_ast_tree(parser_ast);
+        // destroy_ast_tree(parser_ast);
         return 0;
 }
 
