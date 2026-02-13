@@ -176,6 +176,14 @@ struct InterpValue handle_loop(RST_t *st, const struct AST *n)
 struct InterpValue handle_indexing(RST_t *st, const struct AST *n)
 {
         struct InterpValue list = evaluate_one(st, n->lhs);
+        if (list.type == VAL_String) {
+                size_t index = to_num(evaluate_one(st, n->rhs));
+                return (struct InterpValue) {
+                        .type = VAL_Num,
+                        .f32 = list.str[index],
+                };
+        }
+
         if (list.type != VAL_Node)
                 return NIL_VALUE;
 
