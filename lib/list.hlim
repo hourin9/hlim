@@ -1,0 +1,6 @@
+decl(length <list> {
+    decl(i 0)
+    loop(![list:i == nil] { asn(i i+1) }())
+    i
+})
+
