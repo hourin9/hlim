@@ -1,0 +1,33 @@
+decl(length <list> {
+    decl(i 0)
+    loop(![list:i == nil] { asn(i i+1) }())
+    i
+})
+
+decl(fib <n> {
+    decl(step <target list> {
+        decl(len length(list))
+        if(len gr target
+            list:target
+            {
+                decl(a list:[len-1])
+                decl(b list:[len-2])
+                asn(list:[-1] a+b)
+                step(target list)
+            }()
+        )
+    })
+
+    step(n {0 1})
+})
+
+assert(fib(0) == 0)
+assert(fib(1) == 1)
+assert(fib(5) == 5)
+assert(fib(10) == 55)
+assert(fib(20) == 6765)
+assert(fib(40) == 102334155)
+
+drop(fib)
+drop(length)
+
