@@ -29,6 +29,7 @@ struct AST *parser_ast;
 %token LE
 %token LOOP
 %token NEQ
+%token NIL
 %token NOT
 %token OPTIMIZE
 
@@ -96,6 +97,7 @@ asn_body: list_index expr {
 
 primary: NUM_LIT { $$ = number($1); }
        | '[' '-' NUM_LIT ']' { $$ = number(-$NUM_LIT); }
+       | NIL { $$ = nil(); }
        | STR_LIT { $$ = string($1); }
        | ID { $$ = id($1); }
        | block

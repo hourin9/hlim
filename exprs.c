@@ -199,8 +199,13 @@ struct InterpValue handle_indexing(RST_t *st, const struct AST *n)
 struct InterpValue handle_arithmetic(RST_t *st, const struct AST *n)
 {
         struct InterpValue val = { .type = VAL_Num };
-        float rhs = to_num(evaluate_one(st, n->rhs)),
-              lhs = to_num(evaluate_one(st, n->lhs));
+        struct InterpValue rhsv = evaluate_one(st, n->rhs),
+                           lhsv = evaluate_one(st, n->lhs);
+
+        bool different_types = rhsv.type != lhsv.type;
+
+        float rhs = to_num(rhsv),
+              lhs = to_num(lhsv);
 
         switch (n->arit) {
         case ART_Add:
@@ -225,18 +230,26 @@ struct InterpValue handle_arithmetic(RST_t *st, const struct AST *n)
 
         case ART_Eq:
                 val.f32 = (int)(lhs == rhs);
+                if (different_types)
+                        val.f32 = 0;
                 break;
 
         case ART_Neq:
                 val.f32 = (int)(lhs != rhs);
+                if (different_types)
+                        val.f32 = 0;
                 break;
 
         case ART_Greater:
                 val.f32 = (int)(lhs > rhs);
+                if (different_types)
+                        val.f32 = 0;
                 break;
 
         case ART_Lesser:
                 val.f32 = (int)(lhs < rhs);
+                if (different_types)
+                        val.f32 = 0;
                 break;
 
         case ART_Not:

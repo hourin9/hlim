@@ -70,9 +70,12 @@ struct InterpValue evaluate_one(RST_t *st, struct AST *n)
                         .str = n->sval,
                 };
 
-        default:
+        case AST_Nil:
+        case AST_Invalid:
                 return NIL_VALUE;
         }
+
+        __builtin_unreachable();
 }
 
 void print_value(struct InterpValue v)

@@ -13,3 +13,6 @@ assert(![54 gr 54] "Greater than comparison with equal nums failed")
 assert(54 le 54.1 "Lesser than comparison failed")
 assert(![54 le 54] "Lesser than comparison with equal nums failed")
 
+assert(![54 == nil] "Number comparison with nil failed")
+assert(nil == nil "nil comparison with nil failed")
+

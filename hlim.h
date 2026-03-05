@@ -19,6 +19,7 @@ enum ASTType {
         AST_Arit,
         AST_Import,
         AST_Include,
+        AST_Nil,
 };
 
 enum ArtType {
@@ -81,6 +82,7 @@ struct AST *binary(enum ArtType, struct AST *lhs, struct AST *rhs);
 
 struct AST *leaf(enum ASTType, char *sval);
 struct AST *number(float);
+struct AST *nil(void);
 struct AST *string(char*);
 struct AST *id(char *sval);
 struct AST *block(struct AST *body);

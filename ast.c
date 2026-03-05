@@ -62,6 +62,13 @@ struct AST *number(float f32)
         return node;
 }
 
+struct AST *nil(void)
+{
+        struct AST *node = default_node();
+        node->type = AST_Nil;
+        return node;
+}
+
 struct AST *string(char *str)
 {
         struct AST *node = default_node();

@@ -81,6 +81,8 @@ static char *_process_str(char *raw)
 "gr" { return GR; }
 "le" { return LE; }
 
+"nil" { return NIL; }
+
 \"[^"\n]*\" {
         char *raw = strndup(yytext + 1, yyleng - 2);
         yylval.str = _process_str(raw);
