@@ -203,6 +203,8 @@ struct InterpValue handle_arithmetic(RST_t *st, const struct AST *n)
                            lhsv = evaluate_one(st, n->lhs);
 
         bool different_types = rhsv.type != lhsv.type;
+        bool contains_nil = (rhsv.type == VAL_Nil) ||
+                (lhsv.type == VAL_Nil);
 
         float rhs = to_num(rhsv),
               lhs = to_num(lhsv);
@@ -230,25 +232,25 @@ struct InterpValue handle_arithmetic(RST_t *st, const struct AST *n)
 
         case ART_Eq:
                 val.f32 = (int)(lhs == rhs);
-                if (different_types)
-                        val.f32 = 0;
+                if (contains_nil)
+                        val.f32 = !different_types;
                 break;
 
         case ART_Neq:
                 val.f32 = (int)(lhs != rhs);
-                if (different_types)
-                        val.f32 = 0;
+                if (contains_nil)
+                        val.f32 = different_types;
                 break;
 
         case ART_Greater:
                 val.f32 = (int)(lhs > rhs);
-                if (different_types)
+                if (contains_nil)
                         val.f32 = 0;
                 break;
 
         case ART_Lesser:
                 val.f32 = (int)(lhs < rhs);
-                if (different_types)
+                if (contains_nil)
                         val.f32 = 0;
                 break;
 
