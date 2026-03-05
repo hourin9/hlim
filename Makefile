@@ -31,17 +31,13 @@ gram.tab.c: gram.y hlim.h
 lex.yy.c: lex.l
 	$(LEX) $<
 
-clean: clean-deps clean-objs
+clean:
+	rm -f *.o
+	rm -f *.d
 	rm -f hlim gram.tab.* lex.yy.c
 
 clean-docs:
 	rm -f *.pdf docs.aux docs.log
-
-clean-deps:
-	rm -f *.d
-
-clean-objs:
-	rm -f *.o
 
 TEST_FILES := $(wildcard tests/*)
 test:
@@ -56,5 +52,5 @@ HLIM-LANGUAGE-MANUAL.pdf: docs/docs.tex
 
 -include $(OBJ_FILES:.o=.d)
 
-.PHONY: clean all
+.PHONY: clean clean-docs all test
 
