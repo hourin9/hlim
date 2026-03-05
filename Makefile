@@ -31,6 +31,9 @@ gram.tab.c: gram.y hlim.h
 lex.yy.c: lex.l
 	$(LEX) $<
 
+install:
+	install -m 755 hlim $(PREFIX)/bin
+
 clean:
 	rm -f *.o
 	rm -f *.d
