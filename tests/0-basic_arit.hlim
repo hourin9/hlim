@@ -7,3 +7,9 @@ assert([3+4*2] == target "operator prec. failed")
 assert([[3+4]*2] == 14 "expr. grouping failed")
 assert([2*[3+[8/4 ]]] == 10 "deep nesting failed")
 
+assert(54.01 gr 54 "Greater than comparison failed")
+assert(![54 gr 54] "Greater than comparison with equal nums failed")
+
+assert(54 le 54.1 "Lesser than comparison failed")
+assert(![54 le 54] "Lesser than comparison with equal nums failed")
+

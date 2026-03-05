@@ -22,9 +22,11 @@ struct AST *parser_ast;
 %token DECL
 %token DROP
 %token EQ
+%token GR
 %token IF
 %token IMPORT
 %token INCLUDE
+%token LE
 %token LOOP
 %token NEQ
 %token NOT
@@ -44,6 +46,7 @@ struct AST *parser_ast;
 %left ARROW
 %nonassoc NOT
 %left EQ NEQ
+%left GR LE
 %left '+' '-'
 %left '*' '/' '%'
 %left '('
@@ -124,6 +127,8 @@ binary_op: expr '+' expr { $$ = binary(ART_Add, $1, $3); }
          | expr '/' expr { $$ = binary(ART_Div, $1, $3); }
          | expr '%' expr { $$ = binary(ART_Mod, $1, $3); }
          | expr EQ expr { $$ = binary(ART_Eq, $1, $3); }
+         | expr GR expr { $$ = binary(ART_Greater, $1, $3); }
+         | expr LE expr { $$ = binary(ART_Lesser, $1, $3); }
          | expr NEQ expr { $$ = binary(ART_Neq, $1, $3); }
                 ;
 

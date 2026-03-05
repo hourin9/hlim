@@ -78,6 +78,9 @@ static char *_process_str(char *raw)
 "!=" { return NEQ; }
 "!" { return NOT; }
 
+"gr" { return GR; }
+"le" { return LE; }
+
 \"[^"\n]*\" {
         char *raw = strndup(yytext + 1, yyleng - 2);
         yylval.str = _process_str(raw);

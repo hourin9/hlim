@@ -30,6 +30,8 @@ enum ArtType {
         ART_Eq,
         ART_Not,
         ART_Neq,
+        ART_Greater,
+        ART_Lesser,
 
         ART_Index,
 };
