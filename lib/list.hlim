@@ -1,6 +1,16 @@
 decl(length <list> {
     decl(i 0)
-    loop(![list:i == nil] { asn(i i+1) }())
-    i
+    loop(![list:i == nil] asn(i i+1))
+    i+1
+})
+
+decl(find <list n> {
+    decl(i 0)
+    decl(found 0)
+    loop(![list:i == nil] {
+        if(list:i == n asn(found 1))
+        asn(i i+1)
+    }())
+    found
 })
 
