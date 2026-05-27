@@ -14,3 +14,17 @@ decl(find <list n> {
     found
 })
 
+decl(compare <Xs Ys> {
+    decl(i 0)
+    decl(diff 0)
+
+    if(length(Xs) != length(Ys) 1
+        {   loop(![Xs:i == nil] {
+                if(Xs:i != Ys:i asn(diff 1))
+                asn(i i+1)
+            }())
+            diff
+        }()
+    )
+})
+
