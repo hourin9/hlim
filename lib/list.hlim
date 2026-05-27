@@ -28,3 +28,12 @@ decl(compare <Xs Ys> {
     )
 })
 
+decl(map <Xs f> {
+    decl(i 0)
+    decl(Ys {})
+    loop(Xs:i != nil {
+        asn(Ys:[-1] f(Xs:i))
+    }())
+    Ys
+})
+

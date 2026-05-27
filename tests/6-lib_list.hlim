@@ -6,3 +6,8 @@ assert(compare({1 2 3} {1 2 3}) == 0)
 assert(compare({1 2 3} {1 3 2}) == 1)
 assert(compare({1 2 3} {1 2}) == 1)
 
+asn(Xs {1 2 3})
+asn(Ys {2 4 6})
+assert(compare(map(Xs <x>{ x*2 }) Ys) == 0)
+assert(compare(map(Xs {}) {}) == 0)
+
