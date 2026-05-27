@@ -1,0 +1,4 @@
+include("lib/list.hlim")
+
+assert(length({0 -1 2.4 34 1}) == 5)
+
